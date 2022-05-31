@@ -14,16 +14,19 @@ ext {
     junitVersion = '5.8.2'
 }
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = '11.0'
+targetCompatibility = '11.0'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
 dependencies {
+    implementation('mysql:mysql-connector-java:8.0.29')
+    implementation("org.hibernate:hibernate-core:5.6.8.Final")
+    implementation('org.ehcache:ehcache:3.10.0')
+    implementation("org.hibernate:hibernate-ehcache:5.6.8.Final")
     compileOnly('javax.servlet:javax.servlet-api:4.0.1')
-
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
