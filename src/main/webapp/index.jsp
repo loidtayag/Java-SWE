@@ -3,12 +3,10 @@
 <html>
     <head>
         <title>JSP - Hello World</title>
-        <link rel="stylesheet" href="frontend-mentor/one/index.css">
-        <script src="frontend-mentor/one/index.js" async></script>
     </head>
     <body>
         <h1>Hello World!</h1>
-        <br/>
-        <a id="link" href="frontend-mentor/one/index.html">Hello Servlet</a>
+        <a href="hello-servlet">gaS</a>
+
     </body>
 </html>

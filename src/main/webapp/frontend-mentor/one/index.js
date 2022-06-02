@@ -1,1 +1,0 @@
-document.getElementById("link").innerText = "Hehe"
