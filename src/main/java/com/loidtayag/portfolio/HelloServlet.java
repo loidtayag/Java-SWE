@@ -1,4 +1,4 @@
-package com.demo;
+package com.loidtayag.portfolio;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
