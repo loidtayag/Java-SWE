@@ -1,6 +1,4 @@
 body {
-  margin: 0;
-  padding: 0;
   background-color: hsl(235, 21%, 11%);
   font-family: "Josefin Sans", Arial, Helvetica, sans-serif;
   color: white;
@@ -17,15 +15,18 @@ body {
     "header toggle"
     "section section"
     "drag drag";
+  grid-gap: 20px 0px;
   background-color: hsl(235, 24%, 19%);
 }
 
 header {
   grid-area: header;
+  text-align: center;
 }
 
 #toggle {
   grid-area: toggle;
+  text-align: center;
   /*Test*/
   background: none;
   color: inherit;
@@ -38,6 +39,14 @@ header {
 
 #toggle img {
   color: aqua;
+}
+
+#create {
+  text-align: center;
+}
+
+#tasks {
+  text-align: center;
 }
 
 section {
@@ -54,10 +63,12 @@ section {
   justify-content: space-between;
 }
 
-#actions-filter p {
-  margin: 10px 10px;
+#actions-filter li {
+  margin: 0px 10px;
+  list-style-type: none;
 }
 
 #drag {
   grid-area: drag;
+  text-align: center;
 }

@@ -23,3 +23,16 @@ d.addEventListener("mouseenter", () => {
   // d.style.color = "hsl(235, 19%, 35%)";
   d.style.color = "hsl(139, 1%, 78%)";
 });
+
+populateTasks();
+
+async function populateTasks() {
+  const request = new Request("index.json");
+  const response = await fetch(request);
+  const obj = await response.json();
+
+  for (let item of obj) {
+    let generated = document.createElement("p");
+  }
+  console.log(obj.length);
+}

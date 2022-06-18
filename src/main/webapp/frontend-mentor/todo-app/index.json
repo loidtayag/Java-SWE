@@ -1,0 +1,22 @@
+[
+  {
+    "desc": "Vacuum",
+    "status": -1
+  },
+  {
+    "desc": "Wash dishes",
+    "status": 1
+  },
+  {
+    "desc": "Make projects",
+    "status": -1
+  },
+  {
+    "desc": "Shower and cleanse",
+    "status": -1
+  },
+  {
+    "desc": "relax",
+    "status": -1
+  }
+]
