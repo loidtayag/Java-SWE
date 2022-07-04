@@ -18,7 +18,7 @@ public class HelloServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setAttribute("result", "This is the result of the servlet call");
         try {
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         } catch (ServletException e) {
             throw new RuntimeException(e);
         }

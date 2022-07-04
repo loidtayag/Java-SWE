@@ -6,7 +6,6 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <a href="hello-servlet">gaS</a>
-
+        <p onclick="hello-servlet">gaS</p>
     </body>
 </html>
