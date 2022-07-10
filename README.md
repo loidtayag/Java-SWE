@@ -1,5 +1,5 @@
 # Web-Dev
 
-Frontend: HTML, CSS, JS and React at a basic level
+Frontend: React with Typescript
 
 Backend: Hibernate with MySQL and Spring
