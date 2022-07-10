@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import GlobalStyles from "./Global.styles";
 import Blogs, { Blog } from "./Blogs";
 import { NestableButton, StandaloneButton, Text } from "./Button.style";
@@ -23,6 +23,21 @@ function App() {
     console.log(blogs);
   }, [blogs]);
 
+  React.useEffect(() => {
+    setTimeout(
+      () =>
+        fetch("https://jsonplaceholder.typicode.com/posts")
+          .then((response) => response.json())
+          .then((json) => {
+            console.log(json);
+            setIsLoading(false);
+          }),
+      2000
+    );
+  }, []);
+
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <div>
       <GlobalStyles />
@@ -36,10 +51,14 @@ function App() {
       <StandaloneButton bgColor="red">
         <Text>I love programming</Text>
       </StandaloneButton>
+      <br />
+      <br />
       <NestableButton
+        className="why"
         desc="I also love programming"
-        bgColor="red"
+        bgColor="blue"
       ></NestableButton>
+      {isLoading && <p>Loading...</p>}
     </div>
   );
 }

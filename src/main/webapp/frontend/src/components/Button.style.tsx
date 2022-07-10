@@ -1,21 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-
-function Button({ desc }: { desc: String }) {
-  return (
-    <button>
-      <Text>{desc}</Text>
-    </button>
-  );
-}
+import Button from "./Button";
 
 interface Styling {
   bgColor: any;
 }
 
 export const StandaloneButton = styled.button<Styling>`
-  width: 800px;
-  height: 400px;
+  width: 400px;
+  height: 200px;
   background-color: ${(styling: Styling) => styling.bgColor};
 
   &:hover {
@@ -28,8 +21,8 @@ export const StandaloneButton = styled.button<Styling>`
 `;
 
 export const NestableButton = styled(Button)<Styling>`
-  width: 800px;
-  height: 400px;
+  width: 400px;
+  height: 200px;
   background-color: ${(styling: Styling) => styling.bgColor};
 
   &:hover {
