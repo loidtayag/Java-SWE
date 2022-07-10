@@ -2,4 +2,4 @@
 
 Frontend: React with Typescript
 
-Backend: Hibernate with MySQL and Spring
+Main Backend: Spring with Java
