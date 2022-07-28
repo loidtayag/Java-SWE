@@ -1,22 +1,13 @@
-import styled from "styled-components";
 import React from "react";
+import styled from "styled-components";
 
-export default function HideSidebar() {
+export default function RevealSidebar() {
   return (
-    <Flex>
-      <Visual className="foo" onclick={handleClick}>
-        <Embed className="foo" />
-      </Visual>
-      <Textual className="foo" />
-    </Flex>
+    <Visual className="foo" onclick={handleClick}>
+      <Embed className="foo" />
+    </Visual>
   );
 }
-
-const Flex = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-`;
 
 const Visual = styled(
   ({
@@ -32,13 +23,7 @@ const Visual = styled(
       {children}
     </button>
   )
-)`
-  width: 3rem;
-  height: 3rem;
-  border-style: none;
-  cursor: pointer;
-  background-color: #2c2c38;
-`;
+)``;
 
 const handleClick = () => {
   const sidebar = document.getElementById("sidebar");
@@ -50,21 +35,14 @@ const handleClick = () => {
     const parent = sidebar.parentNode;
     if (parent != null) {
       parent.removeChild(sidebar);
-      // parent.append(RevealSidebar);
     }
   }
 };
 
 const Embed = styled(({ className }: { className: string }) => (
-  <img className={className} alt="Hide sidebar button" src="/Hide.svg" />
+  <img className={className} alt="Reveal sidebar button" src="/Eye.svg" />
 ))`
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg)
     brightness(85%) contrast(85%);
-`;
-
-const Textual = styled(({ className }: { className: string }) => (
-  <p className={className}>Hide sidebar</p>
-))`
-  font-size: 1rem;
 `;

@@ -1,36 +1,54 @@
-import Sidebar from "./Sidebar/Sidebar";
-import Header from "./Header/Header";
-import Main from "./Main/Main";
 import styled from "styled-components";
 import Logo from "./Sidebar/Logo";
 import Boards from "./Sidebar/Boards";
 import DayOrNight from "./Sidebar/DayOrNight";
 import HideSidebar from "./Sidebar/HideSidebar";
+import GlobalStyles from "./Sidebar/Global.styles";
 
 export default function App() {
   return (
-    <Layout>
-      <Sidebar>
-        <Logo className="demo" />
-        <Boards demo="2"></Boards>
-        <aside>
-          <DayOrNight />
-          <HideSidebar />
-        </aside>
+    /* HideSidebar dependent on ID */
+    <Grid id="main">
+      <GlobalStyles />
+      {/* HideSidebar dependent on ID */}
+      <Sidebar id="sidebar">
+        <Logo />
+        <Boards demo="foo" />
+        <DayOrNight />
+        <HideSidebar />
       </Sidebar>
       <Header>lorem</Header>
       <Main>lorem</Main>
-    </Layout>
+    </Grid>
   );
 }
 
-const Layout = styled.div`
+const Grid = styled.div`
   display: grid;
   grid-template-areas:
-    "sidebar header header header"
-    "sidebar main main main";
-  margin: 0 0;
-  padding: 0 0;
-  font-family: "Open Sans", sans-serif;
-  color: white;
+    "sidebar header"
+    "sidebar main";
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: 1fr 9fr;
+  /* Issue: White space is left at the bottom of the Grid */
+  min-height: 100vh;
+`;
+
+const Sidebar = styled.nav`
+  grid-area: sidebar;
+  background-color: #2c2c38;
+  display: flex;
+  flex-direction: column;
+`;
+
+// let [Sidebar, isSidebar] = useState(Sidebar);
+
+const Header = styled.div`
+  grid-area: header;
+  background-color: #2c2c38;
+`;
+
+const Main = styled.div`
+  grid-area: main;
+  background-color: #21212d;
 `;

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./components/App";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import App from "./components/App";
 import NotFound from "./components/Other/NotFound";
 
 const root = ReactDOM.createRoot(
@@ -9,12 +9,10 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  // <React.StrictMode>
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
-  // </React.StrictMode>
 );
