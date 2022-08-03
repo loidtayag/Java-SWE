@@ -1,19 +1,26 @@
-import myData from "./db.json";
+import { iBoard, iDatabase } from "../Other/Interfaces";
+import { useState } from "react";
 
-interface Board {
-  id: number;
-  name: string;
-}
+function Boards() {
+  const [boards, setBoards] = useState<string[]>([]);
+  fetch("/db.json", {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  })
+    .then((data: Response) => {
+      return data.json();
+    })
+    .then((json: iDatabase) => {
+      let boardNames: string[] = [];
+      json.boards.forEach((board: iBoard) => {
+        boardNames.push(board.name);
+      });
+      setBoards(boardNames);
+    });
 
-function Boards(props: any) {
-  return (
-    <nav>
-      {myData.map((data: Board) => {
-        console.log(props.demo);
-        return <li key={data.id}>{data.name}</li>;
-      })}
-    </nav>
-  );
+  return <nav>{boards}</nav>;
 }
 
 export default Boards;

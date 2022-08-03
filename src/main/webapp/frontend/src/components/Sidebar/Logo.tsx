@@ -15,7 +15,7 @@ const Flex = styled.div`
   display: flex;
   //justify-content: space-around;
   margin: 8px auto;
-  align-items: baseline;
+  align-items: center;
 `;
 
 const Visual = styled(({ className }: { className: string }) => (

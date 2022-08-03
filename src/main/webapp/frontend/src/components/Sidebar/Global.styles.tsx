@@ -6,6 +6,23 @@ const GlobalStyles = createGlobalStyle`
     padding: 0;
     font-family: "Open Sans", sans-serif;
   }
+
+  #showSidebar {
+    display: grid;
+    grid-template-areas:
+    "sidebar header"
+    "sidebar main";
+    grid-template-rows: 1fr 9fr;
+    grid-template-columns: 1fr 4fr;
+  }
+
+  #hideSidebar {
+    display: grid;
+    grid-template-areas:
+    "header"
+    "main";
+    grid-template-rows: 1fr 9fr;
+  }
 `;
 
 export default GlobalStyles;

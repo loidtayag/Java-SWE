@@ -22,6 +22,8 @@ const Flex = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
+  background-color: #21212d;
+  margin: 0.5rem 3rem;
 `;
 
 const Sun = styled(({ className }: { className: string }) => (

@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function RevealSidebar() {
+export default function RevealSidebar({ onClick }: { onClick: () => void }) {
   return (
-    <Visual className="foo" onclick={handleClick}>
+    <Visual className="foo" onclick={onClick}>
       <Embed className="foo" />
     </Visual>
   );
@@ -23,25 +23,22 @@ const Visual = styled(
       {children}
     </button>
   )
-)``;
-
-const handleClick = () => {
-  const sidebar = document.getElementById("sidebar");
-  const main = document.getElementById("main");
-
-  if (sidebar != null && main != null) {
-    main.style.gridTemplateAreas = '"header" "main"';
-    main.style.gridTemplateColumns = "auto";
-    const parent = sidebar.parentNode;
-    if (parent != null) {
-      parent.removeChild(sidebar);
-    }
-  }
-};
+)`
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  background-color: #21212d;
+  border-style: none;
+`;
 
 const Embed = styled(({ className }: { className: string }) => (
-  <img className={className} alt="Reveal sidebar button" src="/Eye.svg" />
+  <img className={className} alt="Reveal sidebar button" src="/Show.svg" />
 ))`
+  width: 3rem;
+  height: auto;
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg)
     brightness(85%) contrast(85%);
