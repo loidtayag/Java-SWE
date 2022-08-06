@@ -4,7 +4,7 @@ import styled from "styled-components";
 export default function DayOrNight() {
   return (
     <Flex>
-      <Sun className="sun" />
+      <Sun />
       {/* Since Toggle has children with position absolute, Toggle's width is 0px if this is left out */}
       <div>
         <Toggle>
@@ -13,30 +13,30 @@ export default function DayOrNight() {
           <Inner />
         </Toggle>
       </div>
-      <Moon className="moon" />
+      <Moon />
     </Flex>
   );
 }
 
 const Flex = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
   background-color: #21212d;
-  margin: 0.5rem 3rem;
+  width: 10rem;
 `;
 
-const Sun = styled(({ className }: { className: string }) => (
-  <img alt="Sun" src="/Sun.svg" className={className} />
-))`
-  width: 3rem;
-  height: 3rem;
+const Sun = styled.img.attrs(() => ({
+  alt: "Light mode",
+  src: "/sun.svg",
+}))`
+  width: 2.5rem;
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg)
     brightness(85%) contrast(85%);
 `;
 
-export const Toggle = styled.div`
+const Toggle = styled.div`
   position: relative;
   margin-bottom: 1rem;
   /* Since Toggle has children with position absolute, Toggle's width is 0px if this is left out */
@@ -46,7 +46,7 @@ export const Toggle = styled.div`
 
 const Outer = styled.div`
   background-color: #6361c7;
-  width: 3rem;
+  width: 2.5em;
   height: 1rem;
   border-radius: 1rem;
   position: absolute;
@@ -72,7 +72,7 @@ const Input = styled.input`
   cursor: pointer;
 
   &:checked ~ ${Inner} {
-    transform: translate(1.875rem, 0);
+    transform: translate(1.49rem, 0);
     transition: transform 0.8s;
   }
 
@@ -82,11 +82,11 @@ const Input = styled.input`
   }
 `;
 
-const Moon = styled(({ className }: { className: string }) => (
-  <img alt="Moon" src="/Moon.svg" className={className} />
-))`
-  width: 3rem;
-  height: 3rem;
+const Moon = styled.img.attrs(() => ({
+  alt: "Dark mode",
+  src: "/moon.svg",
+}))`
+  height: 2.5rem;
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   filter: invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg)
     brightness(85%) contrast(85%);

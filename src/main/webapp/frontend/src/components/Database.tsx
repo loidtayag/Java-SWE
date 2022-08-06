@@ -8,10 +8,12 @@ export interface iBoard {
   id: number;
   status?: iStatus[] | null;
 }
+
 export interface iStatus {
   name: string;
   tasks?: iTask[] | null;
 }
+
 export interface iTask {
   title: string;
   desc: string;

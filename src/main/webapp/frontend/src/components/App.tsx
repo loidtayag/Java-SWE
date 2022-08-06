@@ -1,41 +1,39 @@
 import styled from "styled-components";
 import { ReactNode, useState } from "react";
-import Logo from "./Sidebar/Logo";
-import Boards from "./Sidebar/Boards";
-import DayOrNight from "./Sidebar/DayOrNight";
-import HideSidebar from "./Sidebar/HideSidebar";
-import GlobalStyles from "./Sidebar/Global.styles";
-import RevealSidebar from "./Sidebar/RevealSidebar";
-import TaskHeading from "./Header/TaskHeading";
-import TaskAdd from "./Header/TaskAdd";
-import Settings from "./Header/Settings";
-import TaskView from "./Main/TaskView";
+import Logo from "./sidebar/Logo";
+import BoardTitles from "./sidebar/BoardTitles";
+import DayOrNight from "./sidebar/DayOrNight";
+import ShownSidebar from "./sidebar/ShownSidebar";
+import GlobalStyles from "./Global.styles";
+import HiddenSidebar from "./sidebar/HiddenSidebar";
+import TaskHeading from "./header/TaskHeading";
+import TaskAdd from "./header/TaskAdd";
+import Settings from "./header/Settings";
+import TaskView from "./main/TaskView";
 
 export default function App() {
-  const [showSidebar, isShowSidebar] = useState(true);
-  const [tasks, isTasks] = useState();
+  const [isSidebar, setIsSidebar] = useState(true);
 
   return (
-    /* HideSidebar dependent on ID */
-    <Grid id={showSidebar ? "showSidebar" : "hideSidebar"} className="foo">
+    /* id affects layout of grid */
+    <Grid id={isSidebar ? "showSidebar" : "hideSidebar"} className="foo">
       <GlobalStyles />
-      {/* HideSidebar dependent on ID */}
-      {showSidebar && (
-        <Sidebar id="sidebar">
+      {isSidebar && (
+        <Sidebar>
           <Logo />
-          <Boards />
+          <BoardTitles />
           <DayOrNight />
-          <HideSidebar
-            onClick={() => {
-              isShowSidebar(!showSidebar);
+          <ShownSidebar
+            setIsSidebar={() => {
+              setIsSidebar(!isSidebar);
             }}
           />
         </Sidebar>
       )}
-      {!showSidebar && (
-        <RevealSidebar
-          onClick={() => {
-            isShowSidebar(!showSidebar);
+      {!isSidebar && (
+        <HiddenSidebar
+          setIsSidebar={() => {
+            setIsSidebar(!isSidebar);
           }}
         />
       )}
@@ -53,20 +51,11 @@ export default function App() {
   );
 }
 
-const Grid = styled(
-  ({
-    id,
-    className,
-    children,
-  }: {
-    id: string;
-    className: string;
-    children: ReactNode;
-  }) => (
-    <div id={id} className={className}>
-      {children}
-    </div>
-  )
+const Grid = styled.div.attrs(
+  ({ id, children }: { id: string; children: ReactNode }) => ({
+    id: id,
+    children: children,
+  })
 )`
   /* White space is left at the bottom of the Grid */
   min-height: 100vh;
