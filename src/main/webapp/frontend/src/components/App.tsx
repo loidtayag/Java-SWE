@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ReactNode, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import Logo from "./sidebar/Logo";
 import BoardTitles from "./sidebar/BoardTitles";
 import DayOrNight from "./sidebar/DayOrNight";
@@ -10,9 +10,13 @@ import TaskHeading from "./header/TaskHeading";
 import TaskAdd from "./header/TaskAdd";
 import Settings from "./header/Settings";
 import TaskView from "./main/TaskView";
+import { iBoard } from "./iDatabase";
 
 export default function App() {
   const [isSidebar, setIsSidebar] = useState(true);
+  let boards: iBoard[] = localStorage.getItem("boards")
+    ? JSON.parse(localStorage.getItem("boards") as string)
+    : [];
 
   return (
     /* id affects layout of grid */
@@ -21,7 +25,7 @@ export default function App() {
       {isSidebar && (
         <Sidebar>
           <Logo />
-          <BoardTitles />
+          <BoardTitles boards={boards} />
           <DayOrNight />
           <ShownSidebar
             setIsSidebar={() => {

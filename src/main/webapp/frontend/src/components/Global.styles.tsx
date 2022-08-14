@@ -26,3 +26,5 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 export default GlobalStyles;
+
+export const theme = { NIGHT: { NIGHT_DARK_NAVY: "#2c2c38" } };

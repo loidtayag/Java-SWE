@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { iBoard, iDatabase, iStatus, iTask } from "../Other/Interfaces";
+import { iBoard, iDatabase, iStatus, iTask } from "../iDatabase";
 
 const TaskView = () => {
   const [boardTitles, setBoardTitles] = useState<string[]>([]);

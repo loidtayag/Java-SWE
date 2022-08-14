@@ -1,49 +1,186 @@
-import React, { ReactNode, useEffect, useState } from "react";
-import { iBoard, iDatabase } from "../Database";
+import React, { ReactNode, useState } from "react";
 import styled from "styled-components";
+import { iBoard } from "../iDatabase";
 
-export default function BoardTitles() {
-  const [boardTitles, setBoardTitles] = useState<ReactNode[]>([]);
-  const [isPending, setIsPending] = useState(true);
+const BoardTitles = ({ boards }: { boards: iBoard[] }) => {
+  let [isOverlay, setIsOverlay] = useState(false);
+  let [boardTitles, setBoardTitles] = useState<iBoard[]>(boards);
+  return (
+    <Flex>
+      {createList(boardTitles, setIsOverlay)}
+      {isOverlay && (
+        <Overlay
+          className={"foo"}
+          setBoardTitles={setBoardTitles}
+          setIsOverlay={setIsOverlay}
+        />
+      )}
+    </Flex>
+  );
+};
 
-  useEffect(() => {
-    fetch("/db.json", {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((data) => (data.ok ? data.json() : null))
-      .then((json: iDatabase | null) => {
-        if (json) {
-          let boardTotal: number = 0;
-          let boardNames: ReactNode[] = [];
-          json.boards.forEach((board: iBoard) => {
-            boardNames.push(<li>{board.name}</li>);
-            boardTotal++;
-          });
-          boardNames.splice(0, 0, <li>{boardTotal}</li>);
-          setBoardTitles(boardNames);
-          setIsPending(false);
-        } else {
-          setBoardTitles(["Status: error..."]);
-          setIsPending(false);
-        }
-      });
-  });
+export default BoardTitles;
 
-  return <Flex>{isPending ? "Status: loading..." : boardTitles}</Flex>;
-}
-
-const Flex = styled.nav.attrs(
-  ({ children }: { children: ReactNode | ReactNode[] }) => ({
-    children: children,
-  })
-)`
+const Flex = styled.nav`
   display: flex;
   flex-direction: column;
-
-  li {
-    list-style: none;
-  }
+  list-style: none;
+  color: white;
 `;
+
+const createList = (data: iBoard[], setIsOverlay: (value: boolean) => void) => {
+  const temp: ReactNode[] = [];
+
+  //Creating total board count list item
+  temp.push(BoardTotal(data.length));
+  let i = 2;
+  //Creating each individual boards list item
+  data.forEach((item) => {
+    temp.push(BoardTitle(item.name, i++));
+  });
+  //Creating list item to create a board
+  temp.push(BoardCreate(i, setIsOverlay));
+
+  return temp;
+};
+
+const BoardTotal = (boardTotal: number) => (
+  <li key={1}>ALL BOARDS ({boardTotal})</li>
+);
+
+const BoardTitle = (boardName: string, key: number) => (
+  <li key={key}>
+    <img
+      alt="Table chart"
+      src="/create.svg"
+      style={{
+        /* https://codepen.io/sosuke/pen/Pjoqqp */
+        filter:
+          "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
+      }}
+    />
+    {boardName}
+  </li>
+);
+
+const BoardCreate = (key: number, setIsOverlay: (value: boolean) => void) => (
+  <li
+    onClick={() => {
+      setIsOverlay(true);
+    }}
+    key={key}
+    style={{ cursor: "pointer" }}
+  >
+    <img
+      alt="Table chart"
+      src="/create.svg"
+      style={{
+        //https://codepen.io/sosuke/pen/Pjoqqp
+        filter:
+          "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
+      }}
+    />
+    +Create New Board
+  </li>
+);
+
+// @ts-ignore
+const Overlay = styled(
+  (props: {
+    className: string;
+    setBoardTitles: (value: iBoard[]) => void;
+    setIsOverlay: (value: boolean) => void;
+  }) => (
+    <form
+      onSubmit={() => handleOverlay(props.setBoardTitles, props.setIsOverlay)}
+      className={props.className}
+      style={{
+        color: "white",
+        display: "flex",
+        flexDirection: "column",
+        padding: "2.5rem",
+        justifyContent: "space-between",
+        minHeight: "7rem",
+      }}
+    >
+      <BoardName></BoardName>
+      <input type={"submit"} value={"Create Board"} />
+    </form>
+  )
+)`
+  position: fixed;
+  width: 30vw;
+  left: 35vw;
+  background-color: #2c2c38;
+`;
+
+const BoardName = () => (
+  <div
+    style={{
+      color: "white",
+      display: "flex",
+      flexDirection: "column",
+      minHeight: "3rem",
+      justifyContent: "space-between",
+    }}
+  >
+    <label>Name</label>
+    {/*'handleOverlay()' dependent on id*/}
+    <input
+      placeholder={"Operation Phoenix"}
+      type={"text"}
+      id={"boardName"}
+      required={true}
+    />
+  </div>
+);
+
+const handleOverlay = (
+  setBoardTitles: (value: iBoard[]) => void,
+  setIsOverlay: (value: boolean) => void
+) => {
+  const input: HTMLElement | null = document?.getElementById("boardName");
+  let boards: iBoard[] = localStorage.getItem("boards")
+    ? JSON.parse(localStorage.getItem("boards") as string)
+    : [];
+  let newBoard: iBoard = {
+    name: (input as HTMLInputElement).value,
+    id: boards.length + 1,
+    status: [
+      {
+        name: "TODO",
+        tasks: [
+          {
+            title: "Task A",
+            desc: "A",
+          },
+        ],
+      },
+      {
+        name: "DOING",
+        tasks: [
+          {
+            title: "Task B",
+            desc: "B",
+          },
+        ],
+      },
+      {
+        name: "DONE",
+        tasks: [
+          {
+            title: "Task C",
+            desc: "C",
+          },
+        ],
+      },
+    ],
+  };
+
+  boards.push(newBoard);
+  //Reassigning local storage
+  localStorage.setItem("boards", JSON.stringify(boards));
+  //Rerender with appropriate states
+  setBoardTitles(boards);
+  setIsOverlay(false);
+};
