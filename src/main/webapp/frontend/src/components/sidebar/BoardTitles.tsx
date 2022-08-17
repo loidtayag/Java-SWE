@@ -84,7 +84,6 @@ const BoardCreate = (key: number, setIsOverlay: (value: boolean) => void) => (
   </li>
 );
 
-// @ts-ignore
 const Overlay = styled(
   (props: {
     className: string;

@@ -6,7 +6,7 @@ import DayOrNight from "./sidebar/DayOrNight";
 import ShownSidebar from "./sidebar/ShownSidebar";
 import GlobalStyles from "./Global.styles";
 import HiddenSidebar from "./sidebar/HiddenSidebar";
-import TaskHeading from "./header/TaskHeading";
+import BoardHeading from "./header/BoardHeading";
 import TaskAdd from "./header/TaskAdd";
 import Settings from "./header/Settings";
 import TaskView from "./main/TaskView";
@@ -42,7 +42,7 @@ export default function App() {
         />
       )}
       <Header>
-        <TaskHeading>foo</TaskHeading>
+        <BoardHeading>foo</BoardHeading>
         <nav>
           <TaskAdd />
           <Settings />

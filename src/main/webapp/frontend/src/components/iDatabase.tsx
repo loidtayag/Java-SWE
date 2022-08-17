@@ -17,6 +17,12 @@ export interface iStatus {
 export interface iTask {
   title: string;
   desc: string;
+  subtasks?: iSubtask[] | null;
+}
+
+export interface iSubtask {
+  desc: string;
+  finished: boolean;
 }
 
 // {

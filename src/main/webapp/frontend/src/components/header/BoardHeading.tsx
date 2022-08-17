@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-const TaskHeading = ({ children }: { children: string }) => {
+const BoardHeading = ({ children }: { children: string }) => {
   return <H1>{children}</H1>;
 };
 
 const H1 = styled.h1``;
 
-export default TaskHeading;
+export default BoardHeading;
