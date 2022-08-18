@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import React, {
   Dispatch,
+  MutableRefObject,
   ReactNode,
   SetStateAction,
   useRef,
   useState,
 } from "react";
+import { iBoard, iStatus } from "../iDatabase";
 
 const TaskAdd = () => {
   let [isOverlay, setIsOverlay] = useState(false);
@@ -28,21 +30,50 @@ const Button = styled.button.attrs((props: { myOnClick: () => void }) => ({
   onClick: props.myOnClick,
 }))<{ myOnClick: () => void }>``;
 
+const getStatus = () => {
+  let name: string[] = [];
+  let boardsString = localStorage.getItem("boards");
+  if (boardsString != null) {
+    let boardsObject: iBoard[] = JSON.parse(boardsString);
+    boardsObject = boardsObject.filter(
+      (boardObject: iBoard) => boardObject.name === "Demo"
+    );
+    let board: iBoard = boardsObject[0];
+    if (board != null) {
+      board.status?.forEach((status: iStatus) => {
+        name.push(status.name);
+      });
+    }
+  }
+  return name;
+};
+
 const Overlay = styled(
   (props: { className: string; setIsOverlay: (value: boolean) => void }) => {
+    const info = useRef<{
+      title: string;
+      desc: string;
+      subtasks: string[];
+      status: string;
+    }>({
+      title: "",
+      desc: "",
+      subtasks: [],
+      status: "",
+    });
     const [subtasks, setSubtasks] = useState<ReactNode[]>([
       <div key={0}>
         <input
           type="text"
           placeholder="It's always good to take a break to avoid burnout, plus happy employees leads to increased productivity."
-          onBlur={() => {
-            handleBlur(this);
+          onBlur={(event) => {
+            handleSubtask(0, event, info);
           }}
         />
         <button
           type="button"
           onClick={() => {
-            handleDelete(0, subtasks, setSubtasks);
+            handleDelete(0, subtasks, setSubtasks, info);
           }}
         >
           <img
@@ -53,12 +84,11 @@ const Overlay = styled(
         </button>
       </div>,
     ]);
-    const info = useRef({ title: "", desc: "", subtasks: [] });
 
     return (
       <form
-        onSubmit={() => {
-          handleSubmit(props.setIsOverlay);
+        onSubmit={(event) => {
+          handleSubmit(event, props.setIsOverlay, info);
         }}
         className={props.className}
         style={{
@@ -70,14 +100,6 @@ const Overlay = styled(
           minHeight: "7rem",
         }}
       >
-        <button
-          type="button"
-          onClick={() => {
-            demo(setSubtasks);
-          }}
-        >
-          Hi
-        </button>
         <h2>Add New Task</h2>
         <div>
           <h3>Title</h3>
@@ -86,6 +108,9 @@ const Overlay = styled(
             type="text"
             required={true}
             placeholder="Take coffee break."
+            onBlur={(event) => {
+              handleTitle(event, info);
+            }}
           />
         </div>
         <div>
@@ -95,16 +120,24 @@ const Overlay = styled(
             type="text"
             required={true}
             placeholder="It's always good to take a break to avoid burnout, plus happy employees leads to increased productivity."
+            onBlur={(event) => {
+              handleDesc(event, info);
+            }}
           />
         </div>
         <div>
           <h3>Subtasks</h3>
-          <Subtasks subTasks={subtasks} setSubtasks={setSubtasks} />
+          <Subtasks subTasks={subtasks} setSubtasks={setSubtasks} info={info} />
         </div>
         <div>
           <h3>Status</h3>
-          <select id="status">
-            <option value="TODO">TODO</option>
+          <select
+            id="status"
+            onBlur={(event) => {
+              handleStatus(event, info);
+            }}
+          >
+            <StatusOptions />
           </select>
         </div>
         <input type="submit" value="Create Task" />
@@ -118,21 +151,85 @@ const Overlay = styled(
   background-color: #2c2c38;
 `;
 
-const handleBlur = (input: React.FocusEvent<HTMLInputElement>) => {
-  console.log(input.target.value);
+const StatusOptions = () => {
+  let key = 0;
+  return (
+    <>
+      {getStatus().map((status: string) => (
+        <option value={status} key={key++}>
+          {status}
+        </option>
+      ))}
+    </>
+  );
+};
+
+const handleTitle = (
+  input: React.FocusEvent<HTMLInputElement>,
+  info: MutableRefObject<{
+    title: string;
+    desc: string;
+    subtasks: string[];
+    status: string;
+  }>
+) => {
+  info.current.title = input.target.value;
+};
+
+const handleDesc = (
+  input: React.FocusEvent<HTMLInputElement>,
+  info: MutableRefObject<{
+    title: string;
+    desc: string;
+    subtasks: string[];
+    status: string;
+  }>
+) => {
+  info.current.desc = input.target.value;
+};
+
+const handleSubtask = (
+  index: number,
+  input: React.FocusEvent<HTMLInputElement>,
+  info: MutableRefObject<{
+    title: string;
+    desc: string;
+    subtasks: string[];
+  }>
+) => {
+  info.current.subtasks[index] = input.target.value;
+};
+
+const handleStatus = (
+  input: React.FocusEvent<HTMLSelectElement>,
+  info: MutableRefObject<{
+    title: string;
+    desc: string;
+    subtasks: string[];
+    status: string;
+  }>
+) => {
+  info.current.status = input.target.value;
 };
 
 const demo = (set: Dispatch<SetStateAction<ReactNode[]>>) => {
   set([]);
 };
 
-const handleSubmit = (setIsOverlay: (value: boolean) => void) => {
+const handleSubmit = (
+  event: React.FormEvent<HTMLFormElement>,
+  setIsOverlay: (value: boolean) => void,
+  info: MutableRefObject<{ title: string; desc: string; subtasks: string[] }>
+) => {
+  console.log(info);
+  event.preventDefault();
   setIsOverlay(false);
 };
 
 const Subtasks = (props: {
   subTasks: ReactNode[];
   setSubtasks: Dispatch<SetStateAction<ReactNode[]>>;
+  info: MutableRefObject<{ title: string; desc: string; subtasks: string[] }>;
 }) => {
   return (
     <>
@@ -140,7 +237,7 @@ const Subtasks = (props: {
       <button
         type="button"
         onClick={() => {
-          handleSubtasks(props.subTasks, props.setSubtasks);
+          handleSubtasks(props.subTasks, props.setSubtasks, props.info);
         }}
       >
         + Add New Subtask
@@ -153,18 +250,22 @@ const Subtasks = (props: {
 //the <input/> array as well
 const handleSubtasks = (
   subTasks: ReactNode[],
-  setSubtasks: Dispatch<SetStateAction<ReactNode[]>>
+  setSubtasks: Dispatch<SetStateAction<ReactNode[]>>,
+  info: MutableRefObject<{ title: string; desc: string; subtasks: string[] }>
 ) => {
   subTasks.push(
     <div key={subTasks.length}>
       <input
         type="text"
         placeholder="It's always good to take a break to avoid burnout, plus happy employees leads to increased productivity."
+        onBlur={(event) => {
+          handleSubtask(subTasks.length - 1, event, info);
+        }}
       />
       <button
         type="button"
         onClick={() => {
-          handleDelete(subTasks.length - 1, subTasks, setSubtasks);
+          handleDelete(subTasks.length - 1, subTasks, setSubtasks, info);
         }}
       >
         <img
@@ -181,9 +282,11 @@ const handleSubtasks = (
 const handleDelete = (
   index: number,
   subTasks: ReactNode[],
-  setSubtasks: Dispatch<SetStateAction<ReactNode[]>>
+  setSubtasks: Dispatch<SetStateAction<ReactNode[]>>,
+  info: MutableRefObject<{ title: string; desc: string; subtasks: string[] }>
 ) => {
   subTasks.splice(index, 1);
+  info.current.subtasks.splice(index, 1);
   setSubtasks(subTasks.concat([]));
 };
 
