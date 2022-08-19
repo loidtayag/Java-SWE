@@ -7,7 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { iBoard, iStatus } from "../iDatabase";
+import { iBoard, iStatus, iSubtask, iTask } from "../iDatabase";
 
 const TaskAdd = () => {
   let [isOverlay, setIsOverlay] = useState(false);
@@ -59,7 +59,7 @@ const Overlay = styled(
       title: "",
       desc: "",
       subtasks: [],
-      status: "",
+      status: getStatus()[0],
     });
     const [subtasks, setSubtasks] = useState<ReactNode[]>([
       <div key={0}>
@@ -219,9 +219,47 @@ const demo = (set: Dispatch<SetStateAction<ReactNode[]>>) => {
 const handleSubmit = (
   event: React.FormEvent<HTMLFormElement>,
   setIsOverlay: (value: boolean) => void,
-  info: MutableRefObject<{ title: string; desc: string; subtasks: string[] }>
+  info: MutableRefObject<{
+    title: string;
+    desc: string;
+    subtasks: string[];
+    status: string;
+  }>
 ) => {
-  console.log(info);
+  let boardsString = localStorage.getItem("boards");
+  if (boardsString != null) {
+    let boardsObject: iBoard[] = JSON.parse(boardsString);
+    //Finding board
+    for (let i = 0; i < boardsObject.length; i++) {
+      if (boardsObject[i].name === "Demo") {
+        //Found board
+        let board: iBoard = boardsObject[i];
+        //Finding status
+        // @ts-ignore
+        for (let j = 0; j < board.status?.length; j++) {
+          //Found status
+          // @ts-ignore
+          if (board.status[j].name === info.current.status) {
+            // @ts-ignore
+            let status: iStatus = board.status[j];
+            let subTasks: iSubtask[] = info.current.subtasks.map(
+              (subtask: string) => ({ desc: subtask, finished: false })
+            );
+            let task: iTask = {
+              title: info.current.title,
+              desc: info.current.desc,
+              subtasks: subTasks,
+            };
+            // @ts-ignore
+            boardsObject[i].status[j].tasks.push(task);
+            break;
+          }
+        }
+        localStorage.setItem("boards", JSON.stringify(boardsObject));
+        break;
+      }
+    }
+  }
   event.preventDefault();
   setIsOverlay(false);
 };
