@@ -229,36 +229,39 @@ const handleSubmit = (
   let boardsString = localStorage.getItem("boards");
   if (boardsString != null) {
     let boardsObject: iBoard[] = JSON.parse(boardsString);
-    //Finding board
-    for (let i = 0; i < boardsObject.length; i++) {
-      if (boardsObject[i].name === "Demo") {
-        //Found board
-        let board: iBoard = boardsObject[i];
-        //Finding status
+    console.log(boardsObject);
+    let index: number | null = (localStorage.getItem(
+      "selectedBoard"
+    ) as unknown as number)
+      ? (localStorage.getItem("selectedBoard") as unknown as number)
+      : null;
+    let board: iBoard | undefined = undefined;
+    if (index != null) {
+      board = boardsObject[index - 2];
+    }
+    //Finding status
+    // @ts-ignore
+    for (let j = 0; j < board.status?.length; j++) {
+      //Found status
+      // @ts-ignore
+      if (board.status[j].name === info.current.status) {
         // @ts-ignore
-        for (let j = 0; j < board.status?.length; j++) {
-          //Found status
-          // @ts-ignore
-          if (board.status[j].name === info.current.status) {
-            // @ts-ignore
-            let status: iStatus = board.status[j];
-            let subTasks: iSubtask[] = info.current.subtasks.map(
-              (subtask: string) => ({ desc: subtask, finished: false })
-            );
-            let task: iTask = {
-              title: info.current.title,
-              desc: info.current.desc,
-              subtasks: subTasks,
-            };
-            // @ts-ignore
-            boardsObject[i].status[j].tasks.push(task);
-            break;
-          }
-        }
-        localStorage.setItem("boards", JSON.stringify(boardsObject));
+        let status: iStatus = board.status[j];
+        let subTasks: iSubtask[] = info.current.subtasks.map(
+          (subtask: string) => ({ desc: subtask, finished: false })
+        );
+        let task: iTask = {
+          title: info.current.title,
+          desc: info.current.desc,
+          subtasks: subTasks,
+        };
+        // @ts-ignore
+        boardsObject[index - 2].status[j].tasks.push(task);
         break;
       }
     }
+    localStorage.setItem("boards", JSON.stringify(boardsObject));
+    console.log(boardsObject);
   }
   event.preventDefault();
   setIsOverlay(false);

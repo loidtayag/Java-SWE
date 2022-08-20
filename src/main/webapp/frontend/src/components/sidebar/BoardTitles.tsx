@@ -50,18 +50,28 @@ const BoardTotal = (boardTotal: number) => (
 
 const BoardTitle = (boardName: string, key: number) => (
   <li key={key}>
-    <img
-      alt="Table chart"
-      src="/create.svg"
-      style={{
-        /* https://codepen.io/sosuke/pen/Pjoqqp */
-        filter:
-          "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
+    <button
+      onClick={() => {
+        selectBoard(key);
       }}
-    />
-    {boardName}
+    >
+      <img
+        alt="Table chart"
+        src="/create.svg"
+        style={{
+          /* https://codepen.io/sosuke/pen/Pjoqqp */
+          filter:
+            "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
+        }}
+      />
+      {boardName}
+    </button>
   </li>
 );
+
+function selectBoard(key: number) {
+  localStorage.setItem("selectedBoard", key as unknown as string);
+}
 
 const BoardCreate = (key: number, setIsOverlay: (value: boolean) => void) => (
   <li
