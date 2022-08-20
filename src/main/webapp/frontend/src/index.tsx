@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./components/App";
-import NotFound from "./components/NotFound";
+import NotFound from "./components/invalid_page/NotFound";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

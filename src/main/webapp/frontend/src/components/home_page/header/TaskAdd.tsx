@@ -7,7 +7,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { iBoard, iStatus, iSubtask, iTask } from "../iDatabase";
+import { iBoard, iStatus, iSubtask, iTask } from "../../../utils/iDatabase";
+import { getBoards, getSelectedBoard } from "../../../utils/helperFunctions";
 
 const TaskAdd = () => {
   let [isOverlay, setIsOverlay] = useState(false);
@@ -15,7 +16,7 @@ const TaskAdd = () => {
   return (
     <>
       <Button
-        myOnClick={() => {
+        onClick={() => {
           setIsOverlay(true);
         }}
       >
@@ -26,40 +27,27 @@ const TaskAdd = () => {
   );
 };
 
-const Button = styled.button.attrs((props: { myOnClick: () => void }) => ({
-  onClick: props.myOnClick,
-}))<{ myOnClick: () => void }>``;
+const Button = styled.button``;
 
-const getStatus = () => {
-  let name: string[] = [];
-  let boardsString = localStorage.getItem("boards");
-  if (boardsString != null) {
-    let boardsObject: iBoard[] = JSON.parse(boardsString);
-    boardsObject = boardsObject.filter(
-      (boardObject: iBoard) => boardObject.name === "Demo"
-    );
-    let board: iBoard = boardsObject[0];
-    if (board != null) {
-      board.status?.forEach((status: iStatus) => {
-        name.push(status.name);
-      });
-    }
-  }
-  return name;
+interface iTaskInfo {
+  title: string;
+  desc: string;
+  subtasks: string[];
+  status: string;
+}
+
+const getStatuses = () => {
+  // @ts-ignore
+  return getSelectedBoard().status.map((status: iStatus) => status.name);
 };
 
 const Overlay = styled(
   (props: { className: string; setIsOverlay: (value: boolean) => void }) => {
-    const info = useRef<{
-      title: string;
-      desc: string;
-      subtasks: string[];
-      status: string;
-    }>({
+    const info = useRef<iTaskInfo>({
       title: "",
       desc: "",
       subtasks: [],
-      status: getStatus()[0],
+      status: getStatuses()[0],
     });
     const [subtasks, setSubtasks] = useState<ReactNode[]>([
       <div key={0}>
@@ -73,7 +61,7 @@ const Overlay = styled(
         <button
           type="button"
           onClick={() => {
-            handleDelete(0, subtasks, setSubtasks, info);
+            handleDeleteSubtask(0, subtasks, setSubtasks, info);
           }}
         >
           <img
@@ -151,19 +139,6 @@ const Overlay = styled(
   background-color: #2c2c38;
 `;
 
-const StatusOptions = () => {
-  let key = 0;
-  return (
-    <>
-      {getStatus().map((status: string) => (
-        <option value={status} key={key++}>
-          {status}
-        </option>
-      ))}
-    </>
-  );
-};
-
 const handleTitle = (
   input: React.FocusEvent<HTMLInputElement>,
   info: MutableRefObject<{
@@ -212,8 +187,17 @@ const handleStatus = (
   info.current.status = input.target.value;
 };
 
-const demo = (set: Dispatch<SetStateAction<ReactNode[]>>) => {
-  set([]);
+const StatusOptions = () => {
+  let key = 0;
+  return (
+    <>
+      {getStatuses().map((status: string) => (
+        <option value={status} key={key++}>
+          {status}
+        </option>
+      ))}
+    </>
+  );
 };
 
 const handleSubmit = (
@@ -226,22 +210,17 @@ const handleSubmit = (
     status: string;
   }>
 ) => {
-  let boardsString = localStorage.getItem("boards");
-  if (boardsString != null) {
-    let boardsObject: iBoard[] = JSON.parse(boardsString);
-    //Finding board
-    for (let i = 0; i < boardsObject.length; i++) {
-      if (boardsObject[i].name === "Demo") {
-        //Found board
-        let board: iBoard = boardsObject[i];
-        //Finding status
-        // @ts-ignore
-        for (let j = 0; j < board.status?.length; j++) {
+  const boards: iBoard[] = getBoards();
+  const selectedBoard: iBoard = getSelectedBoard();
+  //Finding board
+  for (let i = 0; i < boards.length; i++) {
+    //Found board
+    if (boards[i].name === selectedBoard.name) {
+      //Finding status
+      if (selectedBoard.status) {
+        for (let j = 0; j < selectedBoard.status.length; j++) {
           //Found status
-          // @ts-ignore
-          if (board.status[j].name === info.current.status) {
-            // @ts-ignore
-            let status: iStatus = board.status[j];
+          if (selectedBoard.status[j].name === info.current.status) {
             let subTasks: iSubtask[] = info.current.subtasks.map(
               (subtask: string) => ({ desc: subtask, finished: false })
             );
@@ -251,15 +230,22 @@ const handleSubmit = (
               subtasks: subTasks,
             };
             // @ts-ignore
-            boardsObject[i].status[j].tasks.push(task);
+            boards[i].status[j].tasks.push(task);
+            console.log(
+              JSON.parse(localStorage.getItem("boards") as unknown as string)
+            );
+            localStorage.setItem("boards", JSON.stringify(boards));
+            console.log(
+              JSON.parse(localStorage.getItem("boards") as unknown as string)
+            );
             break;
           }
         }
-        localStorage.setItem("boards", JSON.stringify(boardsObject));
-        break;
       }
+      break;
     }
   }
+
   event.preventDefault();
   setIsOverlay(false);
 };
@@ -275,7 +261,7 @@ const Subtasks = (props: {
       <button
         type="button"
         onClick={() => {
-          handleSubtasks(props.subTasks, props.setSubtasks, props.info);
+          handleAddSubtask(props.subTasks, props.setSubtasks, props.info);
         }}
       >
         + Add New Subtask
@@ -284,9 +270,7 @@ const Subtasks = (props: {
   );
 };
 
-//Create an array of buttons and whenever a button is clicked, it deletes itself and using its own index, it deletes from
-//the <input/> array as well
-const handleSubtasks = (
+const handleAddSubtask = (
   subTasks: ReactNode[],
   setSubtasks: Dispatch<SetStateAction<ReactNode[]>>,
   info: MutableRefObject<{ title: string; desc: string; subtasks: string[] }>
@@ -303,7 +287,7 @@ const handleSubtasks = (
       <button
         type="button"
         onClick={() => {
-          handleDelete(subTasks.length - 1, subTasks, setSubtasks, info);
+          handleDeleteSubtask(subTasks.length - 1, subTasks, setSubtasks, info);
         }}
       >
         <img
@@ -317,7 +301,7 @@ const handleSubtasks = (
   setSubtasks(subTasks.concat([]));
 };
 
-const handleDelete = (
+const handleDeleteSubtask = (
   index: number,
   subTasks: ReactNode[],
   setSubtasks: Dispatch<SetStateAction<ReactNode[]>>,

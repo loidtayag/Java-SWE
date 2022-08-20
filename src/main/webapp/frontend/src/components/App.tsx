@@ -1,59 +1,61 @@
 import styled from "styled-components";
-import React, { ReactNode, useState } from "react";
-import Logo from "./sidebar/Logo";
-import BoardTitles from "./sidebar/BoardTitles";
-import DayOrNight from "./sidebar/DayOrNight";
-import ShownSidebar from "./sidebar/ShownSidebar";
-import GlobalStyles from "./Global.styles";
-import HiddenSidebar from "./sidebar/HiddenSidebar";
-import BoardHeading from "./header/BoardHeading";
-import TaskAdd from "./header/TaskAdd";
-import Settings from "./header/Settings";
-import TaskView from "./main/TaskView";
-import { iBoard } from "./iDatabase";
+import React, { ReactNode, useEffect, useState } from "react";
+import Logo from "./home_page/sidebar/Logo";
+import BoardTitles from "./home_page/sidebar/BoardTitles";
+import DayOrNight from "./home_page/sidebar/DayOrNight";
+import ShownSidebar from "./home_page/sidebar/ShownSidebar";
+import GlobalStyles from "../styles/home_page/Global.styles";
+import HiddenSidebar from "./home_page/sidebar/HiddenSidebar";
+import BoardHeading from "./home_page/header/BoardHeading";
+import TaskAdd from "./home_page/header/TaskAdd";
+import Settings from "./home_page/header/Settings";
+import { getBoards, getSelectedBoard } from "../utils/helperFunctions";
+import BoardView from "./home_page/main/BoardView";
 
-export default function App() {
+const App = () => {
   const [isSidebar, setIsSidebar] = useState(true);
-  let boards: iBoard[] = localStorage.getItem("boards")
-    ? JSON.parse(localStorage.getItem("boards") as string)
-    : [];
+  const [selectedBoard, setSelectedBoard] = useState(getSelectedBoard());
+  //Makes sure at least one board is initialised and a board is selected just to make NPE easier to deal with
+  useEffect(() => {
+    getBoards();
+    getSelectedBoard();
+  }, []);
 
   return (
-    /* id affects layout of grid */
-    <Grid id={isSidebar ? "showSidebar" : "hideSidebar"} className="foo">
+    <>
       <GlobalStyles />
-      {isSidebar && (
-        <Sidebar>
-          <Logo />
-          <BoardTitles boards={boards} />
-          <DayOrNight />
-          <ShownSidebar
+      <Grid id={isSidebar ? "showSidebar" : "hideSidebar"}>
+        {isSidebar && (
+          <Sidebar>
+            <Logo />
+            <BoardTitles setSelectedBoard={setSelectedBoard} />
+            <DayOrNight />
+            <ShownSidebar
+              setIsSidebar={() => {
+                setIsSidebar(!isSidebar);
+              }}
+            />
+          </Sidebar>
+        )}
+        {!isSidebar && (
+          <HiddenSidebar
             setIsSidebar={() => {
               setIsSidebar(!isSidebar);
             }}
           />
-        </Sidebar>
-      )}
-      {!isSidebar && (
-        <HiddenSidebar
-          setIsSidebar={() => {
-            setIsSidebar(!isSidebar);
-          }}
-        />
-      )}
-      <Header>
-        <BoardHeading>foo</BoardHeading>
-        <nav>
+        )}
+        <Header>
+          <BoardHeading>{selectedBoard.name}</BoardHeading>
           <TaskAdd />
           <Settings />
-        </nav>
-      </Header>
-      {/* <section>: Used to either group different articles into different purposes or subjects, or to define the
+        </Header>
+        {/* <section>: Used to either group different articles into different purposes or subjects, or to define the
       different sections of a single article. */}
-      <TaskView />
-    </Grid>
+        <BoardView />
+      </Grid>
+    </>
   );
-}
+};
 
 const Grid = styled.div.attrs(
   ({ id, children }: { id: string; children: ReactNode }) => ({
@@ -65,7 +67,7 @@ const Grid = styled.div.attrs(
   min-height: 100vh;
 `;
 
-const Sidebar = styled.nav`
+const Sidebar = styled.div`
   grid-area: sidebar;
   background-color: #2c2c38;
   display: flex;
@@ -85,3 +87,5 @@ const Header = styled.header`
   display: flex;
   justify-content: space-between;
 `;
+
+export default App;
