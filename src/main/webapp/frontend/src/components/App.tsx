@@ -10,7 +10,6 @@ import BoardHeading from "./home_page/header/BoardHeading";
 import TaskAdd from "./home_page/header/TaskAdd";
 import Settings from "./home_page/header/Settings";
 import { getBoards, getSelectedBoard } from "../utils/helperFunctions";
-import BoardView from "./home_page/main/BoardView";
 
 const App = () => {
   const [isSidebar, setIsSidebar] = useState(true);
@@ -49,9 +48,6 @@ const App = () => {
           <TaskAdd />
           <Settings />
         </Header>
-        {/* <section>: Used to either group different articles into different purposes or subjects, or to define the
-      different sections of a single article. */}
-        <BoardView />
       </Grid>
     </>
   );
