@@ -10,6 +10,7 @@ import BoardHeading from "./home_page/header/BoardHeading";
 import TaskAdd from "./home_page/header/TaskAdd";
 import Settings from "./home_page/header/Settings";
 import { getBoards, getSelectedBoard } from "../utils/helperFunctions";
+import BoardView from "./main/BoardView";
 
 const App = () => {
   const [isSidebar, setIsSidebar] = useState(true);
@@ -48,6 +49,7 @@ const App = () => {
           <TaskAdd />
           <Settings />
         </Header>
+        <BoardView selectedBoard={selectedBoard} />
       </Grid>
     </>
   );
