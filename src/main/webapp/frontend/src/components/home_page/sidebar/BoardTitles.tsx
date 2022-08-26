@@ -1,7 +1,11 @@
 import React, { ReactNode, useState } from "react";
 import styled from "styled-components";
 import { iBoard } from "../../../utils/iDatabase";
-import { getBoards, getSelectedBoard } from "../../../utils/helperFunctions";
+import {
+  defaulT,
+  getBoards,
+  getSelectedBoard,
+} from "../../../utils/helperFunctions";
 
 const BoardTitles = (props: { setSelectedBoard: (value: iBoard) => void }) => {
   const [isOverlay, setIsOverlay] = useState(false);
@@ -141,39 +145,7 @@ const handleOverlay = (
 ) => {
   const input: HTMLElement | null = document?.getElementById("boardName");
   let boards: iBoard[] = getBoards();
-  let newBoard: iBoard = {
-    name: (input as HTMLInputElement).value,
-    id: boards.length + 1,
-    status: [
-      {
-        name: "TODO",
-        tasks: [
-          {
-            title: "Task A",
-            desc: "A",
-          },
-        ],
-      },
-      {
-        name: "DOING",
-        tasks: [
-          {
-            title: "Task B",
-            desc: "B",
-          },
-        ],
-      },
-      {
-        name: "DONE",
-        tasks: [
-          {
-            title: "Task C",
-            desc: "C",
-          },
-        ],
-      },
-    ],
-  };
+  let newBoard: iBoard = defaulT[0];
 
   boards.push(newBoard);
   //Reassigning local storage

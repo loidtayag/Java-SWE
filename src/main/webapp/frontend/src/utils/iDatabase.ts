@@ -5,18 +5,18 @@ export interface iDatabase {
 export interface iBoard {
   name: string;
   id: number;
-  status?: iStatus[] | null;
+  status: iStatus[];
 }
 
 export interface iStatus {
   name: string;
-  tasks?: iTask[] | null;
+  tasks: iTask[];
 }
 
 export interface iTask {
   title: string;
   desc: string;
-  subtasks?: iSubtask[] | null;
+  subtasks: iSubtask[];
 }
 
 export interface iSubtask {
