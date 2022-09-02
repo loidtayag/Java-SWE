@@ -10,7 +10,7 @@ import React, {
 import { iBoard, iStatus, iSubtask, iTask } from "../../../utils/iDatabase";
 import { getBoards, getSelectedBoard } from "../../../utils/helperFunctions";
 
-const TaskAdd = () => {
+const TaskAdd = (props: { setSelectedBoard: (value: iBoard) => void }) => {
   let [isOverlay, setIsOverlay] = useState(false);
 
   return (
@@ -22,7 +22,13 @@ const TaskAdd = () => {
       >
         Add Task
       </Button>
-      {isOverlay && <Overlay className={"foo"} setIsOverlay={setIsOverlay} />}
+      {isOverlay && (
+        <Overlay
+          className={"foo"}
+          setIsOverlay={setIsOverlay}
+          setSelectedBoard={props.setSelectedBoard}
+        />
+      )}
     </>
   );
 };
@@ -42,7 +48,11 @@ const getStatuses = () => {
 };
 
 const Overlay = styled(
-  (props: { className: string; setIsOverlay: (value: boolean) => void }) => {
+  (props: {
+    className: string;
+    setIsOverlay: (value: boolean) => void;
+    setSelectedBoard: (value: iBoard) => void;
+  }) => {
     const info = useRef<iTaskInfo>({
       title: "",
       desc: "",
@@ -77,6 +87,7 @@ const Overlay = styled(
       <form
         onSubmit={(event) => {
           handleSubmit(event, props.setIsOverlay, info);
+          props.setSelectedBoard(getSelectedBoard());
         }}
         className={props.className}
         style={{
@@ -231,13 +242,7 @@ const handleSubmit = (
             };
             // @ts-ignore
             boards[i].status[j].tasks.push(task);
-            console.log(
-              JSON.parse(localStorage.getItem("boards") as unknown as string)
-            );
             localStorage.setItem("boards", JSON.stringify(boards));
-            console.log(
-              JSON.parse(localStorage.getItem("boards") as unknown as string)
-            );
             break;
           }
         }

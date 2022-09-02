@@ -46,12 +46,11 @@ export const initialiseSelectedBoard = (): 0 => {
 };
 
 export const getSelectedBoard = (): iBoard => {
-  const boards: iBoard[] = localStorage.getItem("boards")
-    ? JSON.parse(localStorage.getItem("boards") as string)
-    : [];
-  const indexForSelectedBoard: number = localStorage.getItem("selectedBoard")
-    ? JSON.parse(localStorage.getItem("selectedBoard") as string)
-    : initialiseSelectedBoard();
+  const boards: iBoard[] = JSON.parse(localStorage.getItem("boards") as string);
+  const indexForSelectedBoard: number =
+    boards.length !== 1
+      ? JSON.parse(localStorage.getItem("selectedBoard") as string)
+      : initialiseSelectedBoard();
 
   return boards[indexForSelectedBoard];
 };

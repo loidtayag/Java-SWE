@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import Logo from "./home_page/sidebar/Logo";
 import BoardTitles from "./home_page/sidebar/BoardTitles";
 import DayOrNight from "./home_page/sidebar/DayOrNight";
@@ -13,14 +13,10 @@ import { getBoards, getSelectedBoard } from "../utils/helperFunctions";
 import BoardView from "./main/BoardView";
 
 const App = () => {
+  //Makes sure at least one board is initialised and a board is selected just to make NPE easier to deal with
+  getBoards();
   const [isSidebar, setIsSidebar] = useState(true);
   const [selectedBoard, setSelectedBoard] = useState(getSelectedBoard());
-  //Makes sure at least one board is initialised and a board is selected just to make NPE easier to deal with
-  useEffect(() => {
-    getBoards();
-    getSelectedBoard();
-  }, []);
-
   return (
     <>
       <GlobalStyles />
@@ -46,7 +42,7 @@ const App = () => {
         )}
         <Header>
           <BoardHeading>{selectedBoard.name}</BoardHeading>
-          <TaskAdd />
+          <TaskAdd setSelectedBoard={setSelectedBoard} />
           <Settings />
         </Header>
         <BoardView selectedBoard={selectedBoard} />
