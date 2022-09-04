@@ -1,36 +1,53 @@
 import styled from "styled-components";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useContext, useState } from "react";
 import Logo from "./home_page/sidebar/Logo";
 import BoardTitles from "./home_page/sidebar/BoardTitles";
 import DayOrNight from "./home_page/sidebar/DayOrNight";
 import ShownSidebar from "./home_page/sidebar/ShownSidebar";
 import GlobalStyles from "../styles/home_page/Global.styles";
 import HiddenSidebar from "./home_page/sidebar/HiddenSidebar";
-import BoardHeading from "./home_page/header/BoardHeading";
+import BoardName from "./home_page/header/BoardName";
 import TaskAdd from "./home_page/header/TaskAdd";
 import Settings from "./home_page/header/Settings";
-import { getBoards, getSelectedBoard } from "../utils/helperFunctions";
+import {
+  getBoards,
+  getSelectedBoard,
+  theme as iTheme,
+  ThemeContext,
+} from "../utils/helpers";
 import BoardView from "./main/BoardView";
+import Header from "./home_page/header/Header";
 
 const App = () => {
   //Makes sure at least one board is initialised and a board is selected just to make NPE easier to deal with
   getBoards();
   const [isSidebar, setIsSidebar] = useState(true);
   const [selectedBoard, setSelectedBoard] = useState(getSelectedBoard());
+  const [theme, setTheme] = useState(useContext(ThemeContext));
+  const toggleTheme = () => {
+    if (theme === iTheme.light) {
+      setTheme(iTheme.dark);
+    } else {
+      setTheme(iTheme.light);
+    }
+  };
+
   return (
-    <>
+    <ThemeContext.Provider value={theme}>
       <GlobalStyles />
       <Grid id={isSidebar ? "showSidebar" : "hideSidebar"}>
         {isSidebar && (
           <Sidebar>
             <Logo />
             <BoardTitles setSelectedBoard={setSelectedBoard} />
-            <DayOrNight />
-            <ShownSidebar
-              setIsSidebar={() => {
-                setIsSidebar(!isSidebar);
-              }}
-            />
+            <div>
+              <DayOrNight toggleTheme={toggleTheme} />
+              <ShownSidebar
+                setIsSidebar={() => {
+                  setIsSidebar(!isSidebar);
+                }}
+              />
+            </div>
           </Sidebar>
         )}
         {!isSidebar && (
@@ -41,13 +58,13 @@ const App = () => {
           />
         )}
         <Header>
-          <BoardHeading>{selectedBoard.name}</BoardHeading>
+          <BoardName>{selectedBoard.name}</BoardName>
           <TaskAdd setSelectedBoard={setSelectedBoard} />
           <Settings />
         </Header>
         <BoardView selectedBoard={selectedBoard} />
       </Grid>
-    </>
+    </ThemeContext.Provider>
   );
 };
 
@@ -63,23 +80,17 @@ const Grid = styled.div.attrs(
 
 const Sidebar = styled.div`
   grid-area: sidebar;
-  background-color: #2c2c38;
-  display: flex;
+  background-color: ${() => useContext(ThemeContext).background};
+  display: grid;
   flex-direction: column;
   resize: horizontal;
   overflow: auto;
+  padding-left: 2vw;
   /* Since it shows a white space if moved too far to the left */
-  min-width: 20vw;
+  min-width: 15vw;
   /* Don't want resizing to create a horizontal scrollable */
-  max-width: 80vw;
-`;
-
-const Header = styled.header`
-  grid-area: header;
-  background-color: #2c2c38;
-  border: 0.3rem solid #21212d;
-  display: flex;
-  justify-content: space-between;
+  max-width: 78vw;
+  grid-template-rows: 1fr 9fr auto;
 `;
 
 export default App;

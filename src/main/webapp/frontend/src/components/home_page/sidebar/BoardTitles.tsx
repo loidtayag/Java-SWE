@@ -5,7 +5,10 @@ import {
   defaulT,
   getBoards,
   getSelectedBoard,
-} from "../../../utils/helperFunctions";
+  navSpacing,
+  Text,
+  theme,
+} from "../../../utils/helpers";
 
 const BoardTitles = (props: { setSelectedBoard: (value: iBoard) => void }) => {
   const [isOverlay, setIsOverlay] = useState(false);
@@ -56,7 +59,15 @@ const createList = (
 };
 
 const BoardTotal = (boardTotal: number) => (
-  <li key={0}>ALL BOARDS ({boardTotal})</li>
+  <li key={0}>
+    <Text
+      style={{
+        color: theme.grayText,
+      }}
+    >
+      ALL BOARDS ({boardTotal})
+    </Text>
+  </li>
 );
 
 const BoardIndividual = (
@@ -64,11 +75,22 @@ const BoardIndividual = (
   boardName: string,
   key: number
 ) => (
-  <li key={key}>
+  <li key={key} style={{ marginTop: "1ch" }}>
     <button
       onClick={() => {
-        localStorage.setItem("selectedBoard", key as unknown as string);
+        localStorage.setItem(
+          "selectedBoard",
+          ((key as unknown as number) - 1) as unknown as string
+        );
         setSelectedBoard(getSelectedBoard());
+      }}
+      style={{
+        border: "none",
+        backgroundColor: "inherit",
+        color: "inherit",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
       }}
     >
       <img
@@ -80,7 +102,14 @@ const BoardIndividual = (
             "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
         }}
       />
-      {boardName}
+      <Text
+        style={{
+          marginLeft: navSpacing,
+          color: theme.grayText,
+        }}
+      >
+        {boardName}
+      </Text>
     </button>
   </li>
 );
@@ -91,7 +120,12 @@ const BoardCreate = (key: number, setIsOverlay: (value: boolean) => void) => (
       setIsOverlay(true);
     }}
     key={key}
-    style={{ cursor: "pointer" }}
+    style={{
+      marginTop: "1ch",
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+    }}
   >
     <img
       alt="Table chart"
@@ -100,9 +134,12 @@ const BoardCreate = (key: number, setIsOverlay: (value: boolean) => void) => (
         //https://codepen.io/sosuke/pen/Pjoqqp
         filter:
           "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
+        width: theme.iconSize,
       }}
     />
-    +Create New Board
+    <Text style={{ marginLeft: navSpacing, color: theme.clickable }}>
+      + Create New Board
+    </Text>
   </li>
 );
 
@@ -143,10 +180,11 @@ const handleOverlay = (
   setBoardNames: (value: string[]) => void,
   setIsOverlay: (value: boolean) => void
 ) => {
-  const input: HTMLElement | null = document?.getElementById("boardName");
   let boards: iBoard[] = getBoards();
   let newBoard: iBoard = defaulT[0];
-
+  newBoard.name = (
+    document.getElementById("boardName") as HTMLInputElement
+  )?.value;
   boards.push(newBoard);
   //Reassigning local storage
   localStorage.setItem("boards", JSON.stringify(boards));
@@ -167,7 +205,6 @@ const BoardName = () => (
     }}
   >
     <label>Name</label>
-    {/*'handleOverlay()' dependent on id*/}
     <input
       placeholder={"Operation Phoenix"}
       type={"text"}

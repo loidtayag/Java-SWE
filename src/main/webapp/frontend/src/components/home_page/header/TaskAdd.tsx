@@ -8,7 +8,13 @@ import React, {
   useState,
 } from "react";
 import { iBoard, iStatus, iSubtask, iTask } from "../../../utils/iDatabase";
-import { getBoards, getSelectedBoard } from "../../../utils/helperFunctions";
+import {
+  getBoards,
+  getSelectedBoard,
+  spacing,
+  Text,
+  theme,
+} from "../../../utils/helpers";
 
 const TaskAdd = (props: { setSelectedBoard: (value: iBoard) => void }) => {
   let [isOverlay, setIsOverlay] = useState(false);
@@ -20,7 +26,7 @@ const TaskAdd = (props: { setSelectedBoard: (value: iBoard) => void }) => {
           setIsOverlay(true);
         }}
       >
-        Add Task
+        <Text>+ Add New Task</Text>
       </Button>
       {isOverlay && (
         <Overlay
@@ -33,7 +39,16 @@ const TaskAdd = (props: { setSelectedBoard: (value: iBoard) => void }) => {
   );
 };
 
-const Button = styled.button``;
+const Button = styled.button`
+  color: #ffffff;
+  background-color: ${theme.clickable};
+  border: none;
+  width: 18ch;
+  height: 5ch;
+  border-radius: 2.5ch;
+  margin-right: ${spacing};
+  cursor: pointer;
+`;
 
 interface iTaskInfo {
   title: string;
@@ -146,6 +161,7 @@ const Overlay = styled(
 )`
   position: fixed;
   width: 30vw;
+  top: 43vh;
   left: 35vw;
   background-color: #2c2c38;
 `;

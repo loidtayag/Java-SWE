@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import React, { ReactNode } from "react";
+import { navSpacing, Text, theme } from "../../../utils/helpers";
 
 export default function ShownSidebar({
   setIsSidebar,
@@ -19,6 +20,7 @@ export default function ShownSidebar({
 const Flex = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 1ch;
 `;
 
 const Visual = styled.button.attrs(
@@ -33,24 +35,20 @@ const Visual = styled.button.attrs(
   onclick: (event: any) => any;
   children: ReactNode;
 }>`
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 2.1rem;
   border-style: none;
   cursor: pointer;
-  background-color: #2c2c38;
+  background-color: inherit;
+  margin-right: ${navSpacing};
 `;
 
 const Embed = styled.img.attrs(() => ({
   alt: "Hide sidebar",
   src: "/hide.svg",
 }))`
-  /* https://codepen.io/sosuke/pen/Pjoqqp */
-  filter: invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg)
-    brightness(85%) contrast(85%);
+  filter: ${theme.grayImg};
 `;
 
-const Textual = styled(({ children }: { children: ReactNode }) => (
-  <p>{children}</p>
-))`
-  font-size: 1rem;
+const Textual = styled(Text)`
+  color: ${theme.grayText};
 `;

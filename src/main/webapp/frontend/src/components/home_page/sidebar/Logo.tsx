@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { spacing, ThemeContext } from "../../../utils/helpers";
+import { useContext } from "react";
 
 export default function Logo() {
   return (
@@ -12,17 +14,17 @@ export default function Logo() {
 const Flex = styled.div`
   display: flex;
   align-items: center;
+  color: ${() => useContext(ThemeContext).headers};
 `;
 
 const Visual = styled.img.attrs(() => ({
   alt: "Logo",
   src: "/logo.svg",
 }))`
-  margin-right: 8px;
-  height: 2.75rem;
-  width: 2.75rem;
+  margin-right: ${spacing};
+  width: 3vw;
 `;
 
 const Text = styled.h1`
-  font-size: 2.75rem;
+  font-size: 3.7rem;
 `;

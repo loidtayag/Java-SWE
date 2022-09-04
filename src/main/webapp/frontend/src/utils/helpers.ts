@@ -1,4 +1,6 @@
 import { iBoard } from "./iDatabase";
+import React from "react";
+import styled from "styled-components";
 
 export const initialiseBoards = (): iBoard[] => {
   localStorage.setItem("boards", JSON.stringify(defaulT));
@@ -54,3 +56,34 @@ export const getSelectedBoard = (): iBoard => {
 
   return boards[indexForSelectedBoard];
 };
+
+export const theme = {
+  iconSize: "2.5rem",
+  clickable: "#6660ca",
+  sizeText: "1.3rem",
+  weightText: 600,
+  grayText: "#555763",
+  /* https://codepen.io/sosuke/pen/Pjoqqp */
+  grayImg:
+    "invert(60%) sepia(11%) saturate(294%) hue-rotate(195deg) brightness(92%) contrast(89%)",
+  light: {
+    headers: "#000000",
+    foreground: "#d7fcfc",
+    background: "#ffffff",
+  },
+  dark: {
+    headers: "#ffffff",
+    foreground: "#21212d",
+    background: "#2c2c38",
+  },
+};
+
+export const ThemeContext = React.createContext(theme.dark);
+
+export const spacing = "1.5rem";
+export const navSpacing = "0.6rem";
+
+export const Text = styled.span`
+  font-size: ${theme.sizeText};
+  font-weight: ${theme.weightText};
+`;

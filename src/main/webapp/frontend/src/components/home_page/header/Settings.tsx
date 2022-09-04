@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { spacing, theme } from "../../../utils/helpers";
 
 const Settings = () => {
   return (
@@ -9,21 +10,18 @@ const Settings = () => {
 };
 
 const Button = styled.button`
-  width: 2rem;
-  height: auto;
   background-color: inherit;
   border: none;
+  cursor: pointer;
+  margin-right: ${spacing};
 `;
 
 const Img = styled.img.attrs(() => ({
   alt: "Settings",
   src: "/gear.svg",
 }))`
-  width: 1.6rem;
-  height: 1.6rem;
-  /* https://codepen.io/sosuke/pen/Pjoqqp */
-  filter: invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg)
-    brightness(85%) contrast(85%);
+  width: ${theme.iconSize};
+  filter: ${theme.grayImg};
 `;
 
 export default Settings;

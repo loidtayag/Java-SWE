@@ -1,4 +1,4 @@
-import { getBoards, getSelectedBoard } from "../../utils/helperFunctions";
+import { getBoards, getSelectedBoard } from "../../utils/helpers";
 import { iBoard, iStatus, iTask } from "../../utils/iDatabase";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";

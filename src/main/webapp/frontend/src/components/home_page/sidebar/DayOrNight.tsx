@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { theme, ThemeContext } from "../../../utils/helpers";
 
-export default function DayOrNight() {
+interface iProps {
+  toggleTheme: () => void;
+}
+
+export default function DayOrNight(props: iProps) {
   return (
     <Flex>
       <Sun />
       {/* Since Toggle has children with position absolute, Toggle's width is 0px if this is left out */}
       <div>
-        <Toggle>
-          <Input type="checkbox" />
+        <Toggle
+          onClick={() => {
+            setTimeout(() => {
+              props.toggleTheme();
+            }, 750);
+          }}
+        >
+          <Input type="checkbox" toggleTheme={props.toggleTheme} />
           <Outer />
           <Inner />
         </Toggle>
@@ -22,57 +33,57 @@ const Flex = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #21212d;
-  width: 10rem;
+  background-color: ${() => useContext(ThemeContext).foreground};
+  margin-bottom: 1ch;
+  width: 13.5rem;
 `;
 
 const Sun = styled.img.attrs(() => ({
   alt: "Light mode",
   src: "/sun.svg",
 }))`
-  width: 2.5rem;
-  /* https://codepen.io/sosuke/pen/Pjoqqp */
-  filter: invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg)
-    brightness(85%) contrast(85%);
+  width: 4rem;
+  filter: ${theme.grayImg};
 `;
 
 const Toggle = styled.div`
   position: relative;
-  margin-bottom: 1rem;
   /* Since Toggle has children with position absolute, Toggle's width is 0px if this is left out */
-  width: 3rem;
-  height: 0;
+  width: 4rem;
+  /* Also don't take this out, otherwise height is 0 and the position looks weird for the children */
+  height: 2rem;
 `;
 
 const Outer = styled.div`
-  background-color: #6361c7;
-  width: 2.5em;
-  height: 1rem;
+  background-color: ${theme.clickable};
+  width: 4rem;
+  height: 2rem;
   border-radius: 1rem;
   position: absolute;
-  top: 50%;
 `;
 
 const Inner = styled.div`
   background-color: #ffffff;
-  width: 0.75rem;
-  height: 0.75rem;
-  border-radius: 0.75rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 1rem;
   position: absolute;
-  top: 0.125rem;
-  left: 0.125rem;
+  top: 0.165rem;
+  left: 0.2rem;
 `;
 
-const Input = styled.input`
+const Input = styled.input<iProps>`
   position: absolute;
-  width: 3rem;
-  height: 1rem;
+  width: 4rem;
+  height: 2rem;
   opacity: 0;
   z-index: 1;
   cursor: pointer;
 
+  //Something like deadlock where only one can use toggleTheme
+  //When they access it, the close it off
   &:checked ~ ${Inner} {
-    transform: translate(1.49rem, 0);
+    transform: translate(2.1rem, 0);
     transition: transform 0.8s;
   }
 
@@ -86,8 +97,6 @@ const Moon = styled.img.attrs(() => ({
   alt: "Dark mode",
   src: "/moon.svg",
 }))`
-  height: 2.5rem;
-  /* https://codepen.io/sosuke/pen/Pjoqqp */
-  filter: invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg)
-    brightness(85%) contrast(85%);
+  width: 4rem;
+  filter: ${theme.grayImg};
 `;
