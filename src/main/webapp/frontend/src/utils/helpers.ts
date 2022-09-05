@@ -62,7 +62,7 @@ export const theme = {
   clickable: "#6660ca",
   sizeText: "1.3rem",
   weightText: 600,
-  grayText: "#555763",
+  grayText: "#9da9b4",
   /* https://codepen.io/sosuke/pen/Pjoqqp */
   grayImg:
     "invert(60%) sepia(11%) saturate(294%) hue-rotate(195deg) brightness(92%) contrast(89%)",
@@ -78,7 +78,9 @@ export const theme = {
   },
 };
 
-export const ThemeContext = React.createContext(theme.dark);
+export const ThemeContext = React.createContext(
+  localStorage.getItem("nightMode") ? theme.dark : theme.light
+);
 
 export const spacing = "1.5rem";
 export const navSpacing = "0.6rem";

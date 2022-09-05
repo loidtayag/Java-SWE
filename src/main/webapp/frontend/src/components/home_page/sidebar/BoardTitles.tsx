@@ -96,7 +96,7 @@ const BoardIndividual = (
     >
       <img
         alt="Table chart"
-        src="/create.svg"
+        src="/select.svg"
         style={{
           /* https://codepen.io/sosuke/pen/Pjoqqp */
           filter:
@@ -130,7 +130,7 @@ const BoardCreate = (key: number, setIsOverlay: (value: boolean) => void) => (
   >
     <img
       alt="Table chart"
-      src="/create.svg"
+      src="/select.svg"
       style={{
         //https://codepen.io/sosuke/pen/Pjoqqp
         filter:
@@ -196,7 +196,7 @@ const Overlay = styled(
           backgroundColor: theme.clickable,
           color: useContext(ThemeContext).headers,
           border: "none",
-          borderRadius: "1.35rem",
+          borderRadius: ".7rem",
           fontSize: theme.sizeText,
           fontWeight: theme.weightText,
           cursor: "pointer",
@@ -273,6 +273,7 @@ const BoardName = () => (
         borderRadius: "0.7rem",
         fontSize: theme.sizeText,
         fontWeight: theme.weightText,
+        padding: "0 0.5ch 0 0.5ch",
       }}
     />
   </div>

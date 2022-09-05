@@ -1,12 +1,5 @@
 import styled from "styled-components";
-import React, {
-  Dispatch,
-  MutableRefObject,
-  ReactNode,
-  SetStateAction,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useState } from "react";
 import { iBoard, iStatus, iSubtask, iTask } from "../../../utils/iDatabase";
 import {
   getBoards,
@@ -14,7 +7,9 @@ import {
   spacing,
   Text,
   theme,
+  ThemeContext,
 } from "../../../utils/helpers";
+import { Exit } from "../sidebar/BoardTitles";
 
 const TaskAdd = (props: { setSelectedBoard: (value: iBoard) => void }) => {
   let [isOverlay, setIsOverlay] = useState(false);
@@ -26,7 +21,9 @@ const TaskAdd = (props: { setSelectedBoard: (value: iBoard) => void }) => {
           setIsOverlay(true);
         }}
       >
-        <Text>+ Add New Task</Text>
+        <Text style={{ color: useContext(ThemeContext).headers }}>
+          + Add New Task
+        </Text>
       </Button>
       {isOverlay && (
         <Overlay
@@ -68,36 +65,12 @@ const Overlay = styled(
     setIsOverlay: (value: boolean) => void;
     setSelectedBoard: (value: iBoard) => void;
   }) => {
-    const info = useRef<iTaskInfo>({
+    const [info, setInfo] = useState<iTaskInfo>({
       title: "",
       desc: "",
       subtasks: [],
       status: getStatuses()[0],
     });
-    const [subtasks, setSubtasks] = useState<ReactNode[]>([
-      <div key={0}>
-        <input
-          type="text"
-          placeholder="It's always good to take a break to avoid burnout, plus happy employees leads to increased productivity."
-          onBlur={(event) => {
-            handleSubtask(0, event, info);
-          }}
-        />
-        <button
-          type="button"
-          onClick={() => {
-            handleDeleteSubtask(0, subtasks, setSubtasks, info);
-          }}
-        >
-          <img
-            alt="Delete subtask"
-            src="/delete-task.svg"
-            style={{ width: "3rem", height: "auto" }}
-          />
-        </button>
-      </div>,
-    ]);
-
     return (
       <form
         onSubmit={(event) => {
@@ -106,55 +79,129 @@ const Overlay = styled(
         }}
         className={props.className}
         style={{
-          color: "white",
+          color: useContext(ThemeContext).headers,
           display: "flex",
           flexDirection: "column",
           padding: "2.5rem",
           justifyContent: "space-between",
           minHeight: "7rem",
+          maxHeight: "100vh",
+          overflow: "auto",
+          // https://stackoverflow.com/questions/1776915/how-can-i-center-an-absolutely-positioned-element-in-a-div
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+          fontSize: theme.sizeText,
+          fontWeight: theme.weightText,
+          marginBottom: "2ch",
+          borderRadius: "0.7rem",
+          backgroundColor: useContext(ThemeContext).background,
         }}
       >
-        <h2>Add New Task</h2>
-        <div>
-          <h3>Title</h3>
+        <Exit
+          type="button"
+          onClick={() => {
+            props.setIsOverlay(false);
+          }}
+        >
+          <img
+            src="/exit.svg"
+            alt="Exit overlay"
+            style={{
+              cursor: "pointer",
+              width: theme.iconSize,
+              filter: theme.grayImg,
+            }}
+          />
+        </Exit>
+        <div style={{ marginBottom: "2ch" }}>
+          <h3 style={{ marginBottom: "0.3rem" }}>Title</h3>
           <input
             id="title"
             type="text"
             required={true}
-            placeholder="Take coffee break."
+            placeholder="Plan A to becoming a millionaire"
             onBlur={(event) => {
               handleTitle(event, info);
             }}
+            style={{
+              height: "2.7rem",
+              backgroundColor: useContext(ThemeContext).background,
+              color: theme.grayText,
+              border: "0.1rem solid " + theme.grayText,
+              borderRadius: "0.7rem",
+              fontSize: theme.sizeText,
+              fontWeight: theme.weightText,
+              width: "100%",
+              boxSizing: "border-box",
+              padding: "0 0.5ch 0 0.5ch",
+            }}
           />
         </div>
-        <div>
-          <h3>Description</h3>
+        <div style={{ marginBottom: "2ch" }}>
+          <h3 style={{ marginBottom: "0.3rem" }}>Description</h3>
           <input
             id="desc"
             type="text"
             required={true}
-            placeholder="It's always good to take a break to avoid burnout, plus happy employees leads to increased productivity."
+            placeholder="Sell a million 99s"
             onBlur={(event) => {
               handleDesc(event, info);
             }}
+            style={{
+              height: "2.7rem",
+              backgroundColor: useContext(ThemeContext).background,
+              color: theme.grayText,
+              border: "0.1rem solid " + theme.grayText,
+              borderRadius: "0.7rem",
+              fontSize: theme.sizeText,
+              fontWeight: theme.weightText,
+              width: "100%",
+              boxSizing: "border-box",
+              padding: "0 0.5ch 0 0.5ch",
+            }}
           />
         </div>
-        <div>
-          <h3>Subtasks</h3>
-          <Subtasks subTasks={subtasks} setSubtasks={setSubtasks} info={info} />
+        <div style={{ marginBottom: "2ch" }}>
+          <h3 style={{ marginBottom: "0.3rem" }}>Subtasks</h3>
+          <Subtasks info={info} setInfo={setInfo} />
         </div>
-        <div>
-          <h3>Status</h3>
+        <div style={{ marginBottom: "2ch" }}>
+          <h3 style={{ marginBottom: "0.3rem" }}>Status</h3>
           <select
             id="status"
             onBlur={(event) => {
               handleStatus(event, info);
             }}
+            style={{
+              height: "2.7rem",
+              backgroundColor: useContext(ThemeContext).background,
+              border: "0.1rem solid " + theme.grayText,
+              borderRadius: "0.7rem",
+              cursor: "pointer",
+              color: theme.grayText,
+              fontSize: theme.sizeText,
+              fontWeight: theme.weightText,
+            }}
           >
             <StatusOptions />
           </select>
         </div>
-        <input type="submit" value="Create Task" />
+        <input
+          type="submit"
+          value="Create Task"
+          style={{
+            height: "3.5rem",
+            backgroundColor: theme.clickable,
+            color: useContext(ThemeContext).headers,
+            border: "none",
+            borderRadius: "0.7rem",
+            fontSize: theme.sizeText,
+            fontWeight: theme.weightText,
+            cursor: "pointer",
+          }}
+        />
       </form>
     );
   }
@@ -168,50 +215,23 @@ const Overlay = styled(
 
 const handleTitle = (
   input: React.FocusEvent<HTMLInputElement>,
-  info: MutableRefObject<{
-    title: string;
-    desc: string;
-    subtasks: string[];
-    status: string;
-  }>
+  info: iTaskInfo
 ) => {
-  info.current.title = input.target.value;
+  info.title = input.target.value;
 };
 
 const handleDesc = (
   input: React.FocusEvent<HTMLInputElement>,
-  info: MutableRefObject<{
-    title: string;
-    desc: string;
-    subtasks: string[];
-    status: string;
-  }>
+  info: iTaskInfo
 ) => {
-  info.current.desc = input.target.value;
-};
-
-const handleSubtask = (
-  index: number,
-  input: React.FocusEvent<HTMLInputElement>,
-  info: MutableRefObject<{
-    title: string;
-    desc: string;
-    subtasks: string[];
-  }>
-) => {
-  info.current.subtasks[index] = input.target.value;
+  info.desc = input.target.value;
 };
 
 const handleStatus = (
   input: React.FocusEvent<HTMLSelectElement>,
-  info: MutableRefObject<{
-    title: string;
-    desc: string;
-    subtasks: string[];
-    status: string;
-  }>
+  info: iTaskInfo
 ) => {
-  info.current.status = input.target.value;
+  info.status = input.target.value;
 };
 
 const StatusOptions = () => {
@@ -230,12 +250,7 @@ const StatusOptions = () => {
 const handleSubmit = (
   event: React.FormEvent<HTMLFormElement>,
   setIsOverlay: (value: boolean) => void,
-  info: MutableRefObject<{
-    title: string;
-    desc: string;
-    subtasks: string[];
-    status: string;
-  }>
+  info: iTaskInfo
 ) => {
   const boards: iBoard[] = getBoards();
   const selectedBoard: iBoard = getSelectedBoard();
@@ -247,13 +262,16 @@ const handleSubmit = (
       if (selectedBoard.status) {
         for (let j = 0; j < selectedBoard.status.length; j++) {
           //Found status
-          if (selectedBoard.status[j].name === info.current.status) {
-            let subTasks: iSubtask[] = info.current.subtasks.map(
-              (subtask: string) => ({ desc: subtask, finished: false })
-            );
+          if (selectedBoard.status[j].name === info.status) {
+            let subTasks: iSubtask[] = info.subtasks
+              .filter((subtask: string) => subtask)
+              .map((subtask: string) => ({
+                desc: subtask,
+                finished: false,
+              }));
             let task: iTask = {
-              title: info.current.title,
-              desc: info.current.desc,
+              title: info.title,
+              desc: info.desc,
               subtasks: subTasks,
             };
             // @ts-ignore
@@ -272,65 +290,145 @@ const handleSubmit = (
 };
 
 const Subtasks = (props: {
-  subTasks: ReactNode[];
-  setSubtasks: Dispatch<SetStateAction<ReactNode[]>>;
-  info: MutableRefObject<{ title: string; desc: string; subtasks: string[] }>;
+  info: iTaskInfo;
+  setInfo: (value: iTaskInfo) => void;
 }) => {
+  let i = 0;
   return (
-    <>
-      {props.subTasks}
-      <button
-        type="button"
+    <div>
+      {props.info.subtasks.map((subtask) => (
+        <SubtaskInput
+          info={props.info}
+          setInfo={props.setInfo}
+          subtask={subtask}
+          myKey={i++}
+        />
+      ))}
+      <AddSubtaskButton
         onClick={() => {
-          handleAddSubtask(props.subTasks, props.setSubtasks, props.info);
+          /* Since setState does a shallow comparison to rerender and the fact that '=' assignment is referential for
+          non-primitives makes the below necessary. So to solve this, create a new object and copy the old object to the
+          new object.
+
+          For the first problem, I can't be bothered to find a way to modify setState's comparison. So just doing a
+          deep copy was the only option. No wonder it wouldn't work even if I modified the internals of StateP.
+          For the second issue, doing 'demo = StateP' and modifying demo's internals wouldn't work because demo would
+          actually be pointing to the same value as StateP. Thank god I console logged demo and StateP afterwards, found
+          that StateP somehow magically changed as well which led to discovery of the second issue.
+          */
+          let demo: iTaskInfo = {
+            title: props.info.title,
+            desc: props.info.desc,
+            subtasks: props.info.subtasks,
+            status: props.info.status,
+          };
+          demo.subtasks.push("");
+          props.setInfo(demo);
+        }}
+        type="button"
+        style={{
+          height: "3.5rem",
+          width: "100%",
+          backgroundColor: theme.clickable,
+          color: useContext(ThemeContext).headers,
+          border: "none",
+          borderRadius: "0.7rem",
+          fontSize: theme.sizeText,
+          fontWeight: theme.weightText,
+          cursor: "pointer",
         }}
       >
         + Add New Subtask
-      </button>
-    </>
+      </AddSubtaskButton>
+    </div>
   );
 };
 
-const handleAddSubtask = (
-  subTasks: ReactNode[],
-  setSubtasks: Dispatch<SetStateAction<ReactNode[]>>,
-  info: MutableRefObject<{ title: string; desc: string; subtasks: string[] }>
-) => {
-  subTasks.push(
-    <div key={subTasks.length}>
+const AddSubtaskButton = styled.button``;
+
+const SubtaskInput = (props: {
+  info: iTaskInfo;
+  setInfo: (value: iTaskInfo) => void;
+  subtask: string;
+  myKey: number;
+}) => {
+  let easterEggArray = [
+    "▒▒▒▒▒▒▒█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█",
+    "▒▒▒▒▒▒▒█░▒▒▒▒▒▒▒▓▒▒▓▒▒▒▒▒▒▒░█",
+    "▒▒▒▒▒▒▒█░▒▒▓▒▒▒▒▒▒▒▒▒▄▄▒▓▒▒░█░▄▄",
+    "▒▒▄▀▀▄▄█░▒▒▒▒▒▒▓▒▒▒▒█░░▀▄▄▄▄▄▀░░█",
+    "▒▒█░░░░█░▒▒▒▒▒▒▒▒▒▒▒█░░░░░░░░░░░█",
+    "▒▒▒▀▀▄▄█░▒▒▒▒▓▒▒▒▓▒█░░░█▒░░░░█▒░░█",
+    "▒▒▒▒▒▒▒█░▒▓▒▒▒▒▓▒▒▒█░░░░░░░▀░░░░░█",
+    "▒▒▒▒▒▄▄█░▒▒▒▓▒▒▒▒▒▒▒█░░█▄▄█▄▄█░░█",
+    "▒▒▒▒█░░░█▄▄▄▄▄▄▄▄▄▄█░█▄▄▄▄▄▄▄▄▄█",
+    "▒▒▒▒█▄▄█░░█▄▄█░░░░░░█▄▄█░░█▄▄█",
+  ];
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        marginBottom: "0.3rem",
+      }}
+    >
       <input
         type="text"
-        placeholder="It's always good to take a break to avoid burnout, plus happy employees leads to increased productivity."
+        placeholder={easterEggArray[props.myKey % 10]}
         onBlur={(event) => {
-          handleSubtask(subTasks.length - 1, event, info);
+          handleSubtask(props.info, event, props.myKey);
+        }}
+        style={{
+          width: "100%",
+          height: "2.7rem",
+          color: theme.grayText,
+          border: "0.1rem solid " + theme.grayText,
+          borderRadius: "0.7rem",
+          fontSize: theme.sizeText,
+          fontWeight: theme.weightText,
+          backgroundColor: useContext(ThemeContext).background,
+          marginRight: "1ch",
         }}
       />
       <button
-        type="button"
         onClick={() => {
-          handleDeleteSubtask(subTasks.length - 1, subTasks, setSubtasks, info);
+          let demo: iTaskInfo = {
+            title: props.info.title,
+            desc: props.info.desc,
+            subtasks: props.info.subtasks,
+            status: props.info.status,
+          };
+          demo.subtasks.splice(props.myKey, 1);
+          props.setInfo(demo);
         }}
+        style={{
+          backgroundColor: "inherit",
+          border: "none",
+          display: "inline",
+        }}
+        type="button"
       >
         <img
+          src="/delete-subtask.svg"
           alt="Delete subtask"
-          src="/delete-task.svg"
-          style={{ width: "3rem", height: "auto" }}
+          style={{
+            width: theme.iconSize,
+            filter: theme.grayImg,
+            cursor: "pointer",
+          }}
         />
       </button>
     </div>
   );
-  setSubtasks(subTasks.concat([]));
 };
 
-const handleDeleteSubtask = (
-  index: number,
-  subTasks: ReactNode[],
-  setSubtasks: Dispatch<SetStateAction<ReactNode[]>>,
-  info: MutableRefObject<{ title: string; desc: string; subtasks: string[] }>
+const handleSubtask = (
+  info: iTaskInfo,
+  input: React.FocusEvent<HTMLInputElement>,
+  myKey: number
 ) => {
-  subTasks.splice(index, 1);
-  info.current.subtasks.splice(index, 1);
-  setSubtasks(subTasks.concat([]));
+  info.subtasks[myKey] = input.target.value;
 };
 
 export default TaskAdd;

@@ -1,7 +1,3 @@
-export interface iDatabase {
-  boards: iBoard[];
-}
-
 export interface iBoard {
   name: string;
   id: number;

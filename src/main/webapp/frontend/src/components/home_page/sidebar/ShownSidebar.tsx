@@ -35,11 +35,13 @@ const Visual = styled.button.attrs(
   onclick: (event: any) => any;
   children: ReactNode;
 }>`
-  width: 2.1rem;
+  width: 2.4rem;
   border-style: none;
   cursor: pointer;
   background-color: inherit;
   margin-right: ${navSpacing};
+  padding-left: 0.3rem;
+  margin-top: 1ch;
 `;
 
 const Embed = styled.img.attrs(() => ({

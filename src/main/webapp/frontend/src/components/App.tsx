@@ -26,8 +26,10 @@ const App = () => {
   const [theme, setTheme] = useState(useContext(ThemeContext));
   const toggleTheme = () => {
     if (theme === iTheme.light) {
+      localStorage.setItem("nightMode", "true");
       setTheme(iTheme.dark);
     } else {
+      localStorage.setItem("nightMode", "");
       setTheme(iTheme.light);
     }
   };
