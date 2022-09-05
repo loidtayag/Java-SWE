@@ -15,6 +15,7 @@ const Flex = styled.div`
   display: flex;
   align-items: center;
   color: ${() => useContext(ThemeContext).headers};
+  margin-left: 3px;
 `;
 
 const Visual = styled.img.attrs(() => ({

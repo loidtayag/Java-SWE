@@ -68,8 +68,8 @@ export const theme = {
     "invert(60%) sepia(11%) saturate(294%) hue-rotate(195deg) brightness(92%) contrast(89%)",
   light: {
     headers: "#000000",
-    foreground: "#d7fcfc",
-    background: "#ffffff",
+    foreground: "#CBE4F9",
+    background: "#e9eefc",
   },
   dark: {
     headers: "#ffffff",

@@ -10,6 +10,7 @@ import {
   theme,
   ThemeContext,
 } from "../../../utils/helpers";
+import boardName from "../header/BoardName";
 
 const BoardTitles = (props: { setSelectedBoard: (value: iBoard) => void }) => {
   const [isOverlay, setIsOverlay] = useState(false);
@@ -60,10 +61,11 @@ const createList = (
 };
 
 const BoardTotal = (boardTotal: number) => (
-  <li key={0}>
+  <li key={0} style={{ marginTop: "4ch", marginBottom: "1.5ch" }}>
     <Text
       style={{
         color: theme.grayText,
+        marginLeft: "3px",
       }}
     >
       ALL BOARDS ({boardTotal})
@@ -76,44 +78,73 @@ const BoardIndividual = (
   boardName: string,
   key: number
 ) => (
-  <li key={key} style={{ marginTop: "1ch" }}>
-    <button
-      onClick={() => {
-        localStorage.setItem(
-          "selectedBoard",
-          ((key as unknown as number) - 1) as unknown as string
-        );
-        setSelectedBoard(getSelectedBoard());
-      }}
-      style={{
-        border: "none",
-        backgroundColor: "inherit",
-        color: "inherit",
-        cursor: "pointer",
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <img
-        alt="Table chart"
-        src="/select.svg"
-        style={{
-          /* https://codepen.io/sosuke/pen/Pjoqqp */
-          filter:
-            "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
+  <li
+    key={key}
+    style={{
+      marginTop: "1ch",
+      position: "relative",
+      height: "4rem",
+    }}
+  >
+    <Highlight boardName={boardName}>
+      <button
+        onClick={() => {
+          localStorage.setItem(
+            "selectedBoard",
+            ((key as unknown as number) - 1) as unknown as string
+          );
+          setSelectedBoard(getSelectedBoard());
         }}
-      />
-      <Text
         style={{
-          marginLeft: navSpacing,
-          color: theme.grayText,
+          border: "none",
+          backgroundColor: "inherit",
+          color: "inherit",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        {boardName}
-      </Text>
-    </button>
+        <img
+          alt="Table chart"
+          src="/select.svg"
+          style={{
+            /* https://codepen.io/sosuke/pen/Pjoqqp */
+            filter:
+              "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
+          }}
+        />
+        <Text
+          style={{
+            marginLeft: navSpacing,
+            color:
+              getSelectedBoard().name === boardName
+                ? "inherit"
+                : theme.grayText,
+          }}
+        >
+          {boardName}
+        </Text>
+      </button>
+    </Highlight>
   </li>
 );
+
+const Highlight = styled.div<{ boardName: string }>`
+  background-color: ${(props) => {
+    return getSelectedBoard().name === props.boardName
+      ? theme.clickable
+      : "inherit";
+  }};
+  position: absolute;
+  left: -2vw;
+  top: 0;
+  width: 90%;
+  height: 100%;
+  padding-left: 2vw;
+  color: white;
+  display: flex;
+  border-radius: 0 2rem 2rem 0;
+`;
 
 const BoardCreate = (key: number, setIsOverlay: (value: boolean) => void) => (
   <li
@@ -126,6 +157,7 @@ const BoardCreate = (key: number, setIsOverlay: (value: boolean) => void) => (
       cursor: "pointer",
       display: "flex",
       alignItems: "center",
+      height: "4rem",
     }}
   >
     <img

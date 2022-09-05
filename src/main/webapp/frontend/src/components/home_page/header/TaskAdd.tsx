@@ -21,9 +21,7 @@ const TaskAdd = (props: { setSelectedBoard: (value: iBoard) => void }) => {
           setIsOverlay(true);
         }}
       >
-        <Text style={{ color: useContext(ThemeContext).headers }}>
-          + Add New Task
-        </Text>
+        <Text style={{ color: "#ffffff" }}>+ Add New Task</Text>
       </Button>
       {isOverlay && (
         <Overlay
