@@ -78,26 +78,6 @@ const Overlay = styled(
           props.setSelectedBoard(getSelectedBoard());
         }}
         className={props.className}
-        style={{
-          color: useContext(ThemeContext).headers,
-          display: "flex",
-          flexDirection: "column",
-          padding: "2.5rem",
-          justifyContent: "space-between",
-          minHeight: "7rem",
-          maxHeight: "100vh",
-          overflow: "auto",
-          // https://stackoverflow.com/questions/1776915/how-can-i-center-an-absolutely-positioned-element-in-a-div
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          fontSize: theme.sizeText,
-          fontWeight: theme.weightText,
-          marginBottom: "2ch",
-          borderRadius: "0.7rem",
-          backgroundColor: useContext(ThemeContext).background,
-        }}
       >
         <Exit
           type="button"
@@ -200,17 +180,54 @@ const Overlay = styled(
             fontSize: theme.sizeText,
             fontWeight: theme.weightText,
             cursor: "pointer",
+            /* As you add more subtasks, height gets smaller, this prevents that */
+            minHeight: "3.5rem",
           }}
         />
       </form>
     );
   }
 )`
-  position: fixed;
   width: 30vw;
-  top: 43vh;
-  left: 35vw;
-  background-color: #2c2c38;
+  color: ${() => useContext(ThemeContext).headers};
+  display: flex;
+  flex-direction: column;
+  padding: 2.5rem;
+  justify-content: space-between;
+  min-height: 7rem;
+  max-height: 50vh;
+  overflow: auto;
+  // https://stackoverflow.com/questions/1776915/how-can-i-center-an-absolutely-positioned-element-in-a-div
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: ${theme.sizeText};
+  font-weight: ${theme.weightText};
+  margin-bottom: 2ch;
+  border-radius: 0.7rem;
+  background-color: ${() => useContext(ThemeContext).background};
+
+  ::-webkit-scrollbar {
+    width: 1rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: ${() => useContext(ThemeContext).foreground};
+    box-shadow: 0 0 20rem rgba(0, 0, 0, 0.2) inset;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      color-stop(0.85, rgb(122, 153, 217)),
+      color-stop(0.5, rgb(73, 125, 189)),
+      color-stop(0.25, rgb(43, 75, 172))
+    );
+  }
 `;
 
 const handleTitle = (
@@ -302,6 +319,7 @@ const Subtasks = (props: {
           setInfo={props.setInfo}
           subtask={subtask}
           myKey={i++}
+          key={i}
         />
       ))}
       <AddSubtaskButton
@@ -352,7 +370,7 @@ const SubtaskInput = (props: {
   subtask: string;
   myKey: number;
 }) => {
-  let easterEggArray = [
+  let easterEgg = [
     "▒▒▒▒▒▒▒█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█",
     "▒▒▒▒▒▒▒█░▒▒▒▒▒▒▒▓▒▒▓▒▒▒▒▒▒▒░█",
     "▒▒▒▒▒▒▒█░▒▒▓▒▒▒▒▒▒▒▒▒▄▄▒▓▒▒░█░▄▄",
@@ -375,7 +393,7 @@ const SubtaskInput = (props: {
     >
       <input
         type="text"
-        placeholder={easterEggArray[props.myKey % 10]}
+        placeholder={easterEgg[props.myKey % 10]}
         onBlur={(event) => {
           handleSubtask(props.info, event, props.myKey);
         }}
@@ -389,6 +407,8 @@ const SubtaskInput = (props: {
           fontWeight: theme.weightText,
           backgroundColor: useContext(ThemeContext).background,
           marginRight: "1ch",
+          boxSizing: "border-box",
+          padding: "0 0.5ch 0 0.5ch",
         }}
       />
       <button

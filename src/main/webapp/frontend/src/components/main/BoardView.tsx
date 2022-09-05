@@ -1,7 +1,7 @@
-import { getBoards, getSelectedBoard } from "../../utils/helpers";
+import { getBoards, getSelectedBoard, ThemeContext } from "../../utils/helpers";
 import { iBoard, iStatus, iTask } from "../../utils/iDatabase";
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 const BoardView = (props: { selectedBoard: iBoard }) => {
   useEffect(() => {
@@ -95,6 +95,7 @@ const BoardView = (props: { selectedBoard: iBoard }) => {
 
 const Flex = styled.div`
   display: flex;
+  background-color: ${() => useContext(ThemeContext).foreground};
 `;
 
 interface iKey {
