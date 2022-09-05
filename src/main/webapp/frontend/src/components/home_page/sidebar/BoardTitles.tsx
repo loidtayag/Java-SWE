@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useContext, useState } from "react";
 import styled from "styled-components";
 import { iBoard } from "../../../utils/iDatabase";
 import {
@@ -8,6 +8,7 @@ import {
   navSpacing,
   Text,
   theme,
+  ThemeContext,
 } from "../../../utils/helpers";
 
 const BoardTitles = (props: { setSelectedBoard: (value: iBoard) => void }) => {
@@ -161,11 +162,46 @@ const Overlay = styled(
         flexDirection: "column",
         padding: "2.5rem",
         justifyContent: "space-between",
-        minHeight: "7rem",
+        backgroundColor: useContext(ThemeContext).background,
+        borderRadius: "0.7rem",
+        // https://stackoverflow.com/questions/1776915/how-can-i-center-an-absolutely-positioned-element-in-a-div
+        position: "absolute",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
       }}
     >
+      <Exit
+        type="button"
+        onClick={() => {
+          props.setIsOverlay(false);
+        }}
+      >
+        <img
+          src="/exit.svg"
+          alt="Exit overlay"
+          style={{
+            cursor: "pointer",
+            width: theme.iconSize,
+            filter: theme.grayImg,
+          }}
+        />
+      </Exit>
       <BoardName></BoardName>
-      <input type={"submit"} value={"Create Board"} />
+      <input
+        type={"submit"}
+        value={"Create Board"}
+        style={{
+          height: "3.5rem",
+          backgroundColor: theme.clickable,
+          color: useContext(ThemeContext).headers,
+          border: "none",
+          borderRadius: "1.35rem",
+          fontSize: theme.sizeText,
+          fontWeight: theme.weightText,
+          cursor: "pointer",
+        }}
+      />
     </form>
   )
 )`
@@ -173,6 +209,14 @@ const Overlay = styled(
   width: 30vw;
   left: 35vw;
   background-color: #2c2c38;
+`;
+
+export const Exit = styled.button`
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  background-color: inherit;
+  border: none;
 `;
 
 const handleOverlay = (
@@ -200,16 +244,36 @@ const BoardName = () => (
       color: "white",
       display: "flex",
       flexDirection: "column",
-      minHeight: "3rem",
       justifyContent: "space-between",
+      backgroundColor: useContext(ThemeContext).background,
+      borderRadius: "0.5rem",
+      fontSize: theme.sizeText,
+      fontWeight: theme.weightText,
+      marginBottom: "2ch",
     }}
   >
-    <label>Name</label>
+    <label
+      style={{
+        marginBottom: "0.3rem",
+        color: useContext(ThemeContext).headers,
+      }}
+    >
+      Name
+    </label>
     <input
-      placeholder={"Operation Phoenix"}
+      placeholder={"Million Dollar Plan"}
       type={"text"}
       id={"boardName"}
       required={true}
+      style={{
+        height: "2.7rem",
+        backgroundColor: useContext(ThemeContext).background,
+        color: theme.grayText,
+        border: "0.1rem solid " + theme.grayText,
+        borderRadius: "0.7rem",
+        fontSize: theme.sizeText,
+        fontWeight: theme.weightText,
+      }}
     />
   </div>
 );

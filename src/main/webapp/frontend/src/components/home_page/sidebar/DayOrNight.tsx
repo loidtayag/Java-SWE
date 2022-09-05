@@ -9,7 +9,7 @@ interface iProps {
 export default function DayOrNight(props: iProps) {
   return (
     <Flex>
-      <Sun />
+      <Moon />
       {/* Since Toggle has children with position absolute, Toggle's width is 0px if this is left out */}
       <div>
         <Toggle
@@ -24,7 +24,7 @@ export default function DayOrNight(props: iProps) {
           <Inner />
         </Toggle>
       </div>
-      <Moon />
+      <Sun />
     </Flex>
   );
 }
@@ -36,13 +36,14 @@ const Flex = styled.div`
   background-color: ${() => useContext(ThemeContext).foreground};
   margin-bottom: 1ch;
   width: 13.5rem;
+  height: 3.6rem;
 `;
 
 const Sun = styled.img.attrs(() => ({
   alt: "Light mode",
   src: "/sun.svg",
 }))`
-  width: 4rem;
+  width: 3.7rem;
   filter: ${theme.grayImg};
 `;
 
@@ -68,7 +69,7 @@ const Inner = styled.div`
   height: 1.6rem;
   border-radius: 1rem;
   position: absolute;
-  top: 0.165rem;
+  top: 0.16rem;
   left: 0.2rem;
 `;
 
