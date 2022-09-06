@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { iBoard } from "../../../utils/iDatabase";
 import {
@@ -10,17 +10,24 @@ import {
   theme,
   ThemeContext,
 } from "../../../utils/helpers";
-import boardName from "../header/BoardName";
 
 const BoardTitles = (props: { setSelectedBoard: (value: iBoard) => void }) => {
   const [isOverlay, setIsOverlay] = useState(false);
   const [boardNames, setBoardNames] = useState<string[]>(
     getBoards().map((board: iBoard) => board.name)
   );
+  const refs: (HTMLDivElement | null)[] = [];
+  useEffect(() => {
+    let dragula = require("react-dragula")();
+    refs.forEach((ref) => {
+      dragula.containers.push(ref);
+    });
+    console.log(dragula.containers);
+  }, []);
 
   return (
     <Flex>
-      {createList(props.setSelectedBoard, boardNames, setIsOverlay)}
+      {createList(props.setSelectedBoard, boardNames, setIsOverlay, refs)}
       {isOverlay && (
         <Overlay
           className={"foo"}
@@ -43,16 +50,18 @@ const Flex = styled.nav`
 const createList = (
   setSelectedBoard: (value: iBoard) => void,
   boardNames: string[],
-  setIsOverlay: (value: boolean) => void
+  setIsOverlay: (value: boolean) => void,
+  refs: (HTMLDivElement | null)[]
 ) => {
   const temp: ReactNode[] = [];
 
   //Creating total board count list item
   temp.push(BoardTotal(boardNames.length));
   let key = 1;
+
   //Creating each individual boards list item
   boardNames.forEach((board) => {
-    temp.push(BoardIndividual(setSelectedBoard, board, key++));
+    temp.push(BoardIndividual(setSelectedBoard, board, key++, refs));
   });
   //Creating list item to create a board
   temp.push(BoardCreate(key, setIsOverlay));
@@ -76,57 +85,65 @@ const BoardTotal = (boardTotal: number) => (
 const BoardIndividual = (
   setSelectedBoard: (value: iBoard) => void,
   boardName: string,
-  key: number
+  key: number,
+  refs: (HTMLDivElement | null)[]
 ) => (
-  <li
+  <div
     key={key}
-    style={{
-      marginTop: "1ch",
-      position: "relative",
-      height: "4rem",
+    ref={(ref) => {
+      refs.push(ref);
     }}
+    style={{ cursor: "grab" }}
   >
-    <Highlight boardName={boardName}>
-      <button
-        onClick={() => {
-          localStorage.setItem(
-            "selectedBoard",
-            ((key as unknown as number) - 1) as unknown as string
-          );
-          setSelectedBoard(getSelectedBoard());
-        }}
-        style={{
-          border: "none",
-          backgroundColor: "inherit",
-          color: "inherit",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <img
-          alt="Table chart"
-          src="/select.svg"
-          style={{
-            /* https://codepen.io/sosuke/pen/Pjoqqp */
-            filter:
-              "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
+    <li
+      style={{
+        marginTop: "1ch",
+        position: "relative",
+        height: "4rem",
+      }}
+    >
+      <Highlight boardName={boardName}>
+        <button
+          onClick={() => {
+            localStorage.setItem(
+              "selectedBoard",
+              ((key as unknown as number) - 1) as unknown as string
+            );
+            setSelectedBoard(getSelectedBoard());
           }}
-        />
-        <Text
           style={{
-            marginLeft: navSpacing,
-            color:
-              getSelectedBoard().name === boardName
-                ? "inherit"
-                : theme.grayText,
+            border: "none",
+            backgroundColor: "inherit",
+            color: "inherit",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          {boardName}
-        </Text>
-      </button>
-    </Highlight>
-  </li>
+          <img
+            alt="Table chart"
+            src="/select.svg"
+            style={{
+              /* https://codepen.io/sosuke/pen/Pjoqqp */
+              filter:
+                "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
+            }}
+          />
+          <Text
+            style={{
+              marginLeft: navSpacing,
+              color:
+                getSelectedBoard().name === boardName
+                  ? "inherit"
+                  : theme.grayText,
+            }}
+          >
+            {boardName}
+          </Text>
+        </button>
+      </Highlight>
+    </li>
+  </div>
 );
 
 const Highlight = styled.div<{ boardName: string }>`
