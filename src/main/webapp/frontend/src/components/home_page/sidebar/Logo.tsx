@@ -20,10 +20,11 @@ const Flex = styled.div`
 
 const Visual = styled.img.attrs(() => ({
   alt: "Logo",
-  src: "/logo.svg",
+  src: "/cat.jpg",
 }))`
   margin-right: ${spacing};
-  width: 3vw;
+  width: 6rem;
+  border-radius: 0.7rem;
 `;
 
 const Text = styled.h1`

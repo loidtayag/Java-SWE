@@ -138,7 +138,7 @@ const Highlight = styled.div<{ boardName: string }>`
   position: absolute;
   left: -2vw;
   top: 0;
-  width: 90%;
+  width: 92%;
   height: 100%;
   padding-left: 2vw;
   color: white;

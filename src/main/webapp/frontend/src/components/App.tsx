@@ -17,6 +17,7 @@ import {
 } from "../utils/helpers";
 import BoardView from "./main/BoardView";
 import Header from "./home_page/header/Header";
+import Sidebar from "./home_page/sidebar/Sidebar";
 
 const App = () => {
   //Makes sure at least one board is initialised and a board is selected just to make NPE easier to deal with
@@ -78,21 +79,6 @@ const Grid = styled.div.attrs(
 )`
   /* White space is left at the bottom of the Grid */
   min-height: 100vh;
-`;
-
-const Sidebar = styled.div`
-  grid-area: sidebar;
-  background-color: ${() => useContext(ThemeContext).background};
-  display: grid;
-  flex-direction: column;
-  resize: horizontal;
-  overflow: auto;
-  padding-left: 2vw;
-  /* Since it shows a white space if moved too far to the left */
-  min-width: 15vw;
-  /* Don't want resizing to create a horizontal scrollable */
-  max-width: 78vw;
-  grid-template-rows: 1fr 9fr auto;
 `;
 
 export default App;
