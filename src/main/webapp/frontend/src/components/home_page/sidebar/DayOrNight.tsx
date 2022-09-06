@@ -74,7 +74,7 @@ const Inner = styled.div`
   ${() =>
     useContext(ThemeContext).headers === "#000000"
       ? css`
-          /* Since <Input/> is being moved to the right and NOT <Inner/>, 2.1rem is added onto the usual 2.1rem*/
+          /* Honestly, don't know why this works :l */
           right: 2.3rem;
         `
       : css`
@@ -95,11 +95,11 @@ const Input = styled.input.attrs(() => ({
     ${() =>
       useContext(ThemeContext).foreground === "#000000"
         ? css`
-            transform: translate(0, 0);
+            transform: translate(-2.1rem, 0);
             transition: transform 0.8s;
           `
         : css`
-            transform: translate(2.1rem, 0);
+            transform: translate(0rem, 0);
             transition: transform 0.8s;
           `}
   }
@@ -108,11 +108,11 @@ const Input = styled.input.attrs(() => ({
     ${() =>
       useContext(ThemeContext).foreground === "#000000"
         ? css`
-            transform: translate(-2.1rem, 0);
+            transform: translate(0, 0);
             transition: transform 0.8s;
           `
         : css`
-            transform: translate(0, 0);
+            transform: translate(2.1rem, 0);
             transition: transform 0.8s;
           `}
   }
