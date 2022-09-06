@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { theme, ThemeContext } from "../../../utils/helpers";
 
 interface iProps {
@@ -37,6 +37,7 @@ const Flex = styled.div`
   margin-bottom: 1ch;
   width: 13.5rem;
   height: 3.6rem;
+  border-radius: 0.4rem;
 `;
 
 const Sun = styled.img.attrs(() => ({
@@ -70,27 +71,50 @@ const Inner = styled.div`
   border-radius: 1rem;
   position: absolute;
   top: 0.16rem;
-  left: 0.2rem;
+  ${() =>
+    useContext(ThemeContext).headers === "#000000"
+      ? css`
+          /* Since <Input/> is being moved to the right and NOT <Inner/>, 2.1rem is added onto the usual 2.1rem*/
+          right: 2.3rem;
+        `
+      : css`
+          left: 0.2rem;
+        `}
 `;
 
-const Input = styled.input<iProps>`
+const Input = styled.input.attrs(() => ({
+  defaultChecked: useContext(ThemeContext).headers === "#000000",
+}))<iProps>`
   position: absolute;
   width: 4rem;
   height: 2rem;
   opacity: 0;
   z-index: 1;
   cursor: pointer;
-
-  //Something like deadlock where only one can use toggleTheme
-  //When they access it, the close it off
   &:checked ~ ${Inner} {
-    transform: translate(2.1rem, 0);
-    transition: transform 0.8s;
+    ${() =>
+      useContext(ThemeContext).foreground === "#000000"
+        ? css`
+            transform: translate(0, 0);
+            transition: transform 0.8s;
+          `
+        : css`
+            transform: translate(2.1rem, 0);
+            transition: transform 0.8s;
+          `}
   }
 
   &:not(:checked) ~ ${Inner} {
-    transform: translate(0, 0);
-    transition: transform 0.8s;
+    ${() =>
+      useContext(ThemeContext).foreground === "#000000"
+        ? css`
+            transform: translate(-2.1rem, 0);
+            transition: transform 0.8s;
+          `
+        : css`
+            transform: translate(0, 0);
+            transition: transform 0.8s;
+          `}
   }
 `;
 

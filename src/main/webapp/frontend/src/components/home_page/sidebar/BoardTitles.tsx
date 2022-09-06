@@ -294,7 +294,7 @@ const BoardName = () => (
     </label>
     <input
       placeholder={"Million Dollar Plan"}
-      type={"text"}
+      type={"textarea"}
       id={"boardName"}
       required={true}
       style={{
@@ -306,6 +306,20 @@ const BoardName = () => (
         fontSize: theme.sizeText,
         fontWeight: theme.weightText,
         padding: "0 0.5ch 0 0.5ch",
+      }}
+      onBlur={(event) => {
+        let boards = getBoards();
+        let valid = true;
+        boards.forEach((board: iBoard) => {
+          if (event.currentTarget.value === board.name) {
+            valid = false;
+          }
+        });
+        if (!valid) {
+          event.currentTarget.value = "";
+          event.currentTarget.placeholder =
+            "Another board already has that name, please use another name.";
+        }
       }}
     />
   </div>
