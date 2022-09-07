@@ -13,7 +13,7 @@ const Sidebar = styled.div`
   /* Since it shows a white space if moved too far to the left */
   min-width: 15.5vw;
   /* Don't want resizing to create a horizontal scrollable */
-  max-width: 78vw;
+  max-width: 20vw;
   grid-template-rows: 1fr 9fr auto;
 `;
 

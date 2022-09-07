@@ -71,15 +71,7 @@ const Inner = styled.div`
   border-radius: 1rem;
   position: absolute;
   top: 0.16rem;
-  ${() =>
-    useContext(ThemeContext).headers === "#000000"
-      ? css`
-          /* Honestly, don't know why this works :l */
-          right: 2.3rem;
-        `
-      : css`
-          left: 0.2rem;
-        `}
+  left: 0.2rem;
 `;
 
 const Input = styled.input.attrs(() => ({
@@ -91,6 +83,7 @@ const Input = styled.input.attrs(() => ({
   opacity: 0;
   z-index: 1;
   cursor: pointer;
+  /* Checked means circle is on right side */
   &:checked ~ ${Inner} {
     ${() =>
       useContext(ThemeContext).foreground === "#000000"
@@ -99,22 +92,13 @@ const Input = styled.input.attrs(() => ({
             transition: transform 0.8s;
           `
         : css`
-            transform: translate(0rem, 0);
-            transition: transform 0.8s;
-          `}
-  }
-
-  &:not(:checked) ~ ${Inner} {
-    ${() =>
-      useContext(ThemeContext).foreground === "#000000"
-        ? css`
-            transform: translate(0, 0);
-            transition: transform 0.8s;
-          `
-        : css`
             transform: translate(2.1rem, 0);
             transition: transform 0.8s;
           `}
+  }
+  &:not(:checked) ~ ${Inner} {
+    transform: translate(0, 0);
+    transition: transform 0.8s;
   }
 `;
 

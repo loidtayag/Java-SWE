@@ -3,11 +3,11 @@ import React from "react";
 import styled from "styled-components";
 
 export const initialiseBoards = (): iBoard[] => {
-  localStorage.setItem("boards", JSON.stringify(defaulT));
-  return defaulT;
+  localStorage.setItem("boards", JSON.stringify(init));
+  return init;
 };
 
-export const defaulT: iBoard[] = [
+export const init: iBoard[] = [
   {
     name: "Demo",
     id: 1,
@@ -37,9 +37,10 @@ export const defaulT: iBoard[] = [
 ];
 
 export const getBoards = (): iBoard[] => {
-  return localStorage.getItem("boards")
+  const boards: iBoard[] = localStorage.getItem("boards")
     ? JSON.parse(localStorage.getItem("boards") as string)
-    : initialiseBoards();
+    : [];
+  return boards.length ? boards : initialiseBoards();
 };
 
 export const initialiseSelectedBoard = (): 0 => {
@@ -55,6 +56,14 @@ export const getSelectedBoard = (): iBoard => {
       : initialiseSelectedBoard();
 
   return boards[indexForSelectedBoard];
+};
+
+export const getSelectedBoardIndex = (): number => {
+  const boards: iBoard[] = JSON.parse(localStorage.getItem("boards") as string);
+
+  return boards.length !== 1
+    ? JSON.parse(localStorage.getItem("selectedBoard") as string)
+    : initialiseSelectedBoard();
 };
 
 export const theme = {

@@ -19,7 +19,7 @@ import BoardView from "./main/BoardView";
 import Header from "./home_page/header/Header";
 import Sidebar from "./home_page/sidebar/Sidebar";
 
-const App = () => {
+function App() {
   //Makes sure at least one board is initialised and a board is selected just to make NPE easier to deal with
   getBoards();
   const [isSidebar, setIsSidebar] = useState(true);
@@ -69,7 +69,7 @@ const App = () => {
       </Grid>
     </ThemeContext.Provider>
   );
-};
+}
 
 const Grid = styled.div.attrs(
   ({ id, children }: { id: string; children: ReactNode }) => ({
