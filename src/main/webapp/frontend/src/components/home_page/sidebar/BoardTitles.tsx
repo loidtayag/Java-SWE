@@ -29,7 +29,7 @@ const BoardTitles = (props: { setSelectedBoard: (value: iBoard) => void }) => {
       dragula.containers.push(ref);
     });
   });
-  console.log(deleteOverlay);
+
   return (
     <Flex>
       {createList(
@@ -109,16 +109,17 @@ const DeleteOverlay = styled(
       </Exit>
       <label
         style={{
-          marginBottom: "0.3rem",
+          marginBottom: "2ch",
           color: useContext(ThemeContext).headers,
           fontSize: theme.sizeText,
+          fontWeight: theme.weightText,
         }}
       >
         Press below to confirm deletion of board "{props.deleteOverlay[2]}"
       </label>
       <input
         type={"submit"}
-        value={"- Delete Board"}
+        value={"Delete Board"}
         style={{
           height: "3.5rem",
           backgroundColor: theme.clickable,

@@ -1,6 +1,6 @@
 import { iBoard } from "./iDatabase";
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export const initialiseBoards = (): iBoard[] => {
   localStorage.setItem("boards", JSON.stringify(init));
@@ -95,6 +95,12 @@ export const spacing = "1.5rem";
 export const navSpacing = "0.6rem";
 
 export const Text = styled.span`
+  font-size: ${theme.sizeText};
+  font-weight: ${theme.weightText};
+`;
+
+export const styledText = css`
+  color: ${theme.grayText};
   font-size: ${theme.sizeText};
   font-weight: ${theme.weightText};
 `;

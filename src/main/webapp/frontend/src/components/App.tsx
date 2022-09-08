@@ -15,7 +15,7 @@ import {
   theme as iTheme,
   ThemeContext,
 } from "../utils/helpers";
-import BoardView from "./main/BoardView";
+import ViewBoard from "./main/ViewBoard";
 import Header from "./home_page/header/Header";
 import Sidebar from "./home_page/sidebar/Sidebar";
 
@@ -65,7 +65,7 @@ function App() {
           <TaskAdd setSelectedBoard={setSelectedBoard} />
           <Settings />
         </Header>
-        <BoardView selectedBoard={selectedBoard} />
+        <ViewBoard selectedBoard={selectedBoard} />
       </Grid>
     </ThemeContext.Provider>
   );
