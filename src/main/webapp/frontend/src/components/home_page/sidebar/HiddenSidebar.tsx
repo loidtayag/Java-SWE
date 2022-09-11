@@ -18,11 +18,12 @@ const Visual = styled.button.attrs(({ onclick }: { onclick: () => void }) => ({
   onClick: onclick,
 }))<{ onclick: () => void }>`
   position: fixed;
-  bottom: -0.5ch;
+  bottom: 1.3ch;
   left: 3ch;
   cursor: pointer;
   border-style: none;
   background-color: ${() => useContext(ThemeContext).foreground};
+  isolation: isolate;
 `;
 
 const Embed = styled.img.attrs(() => ({

@@ -10,6 +10,7 @@ const Sidebar = styled.div`
   resize: horizontal;
   overflow: auto;
   padding-left: 2vw;
+  max-height: 100vh;
   /* Since it shows a white space if moved too far to the left */
   min-width: 15.5vw;
   /* Don't want resizing to create a horizontal scrollable */

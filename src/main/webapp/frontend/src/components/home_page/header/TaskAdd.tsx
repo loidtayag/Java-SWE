@@ -105,7 +105,7 @@ const Overlay = styled(
             }}
             style={{
               height: "2.7rem",
-              backgroundColor: useContext(ThemeContext).background,
+              backgroundColor: useContext(ThemeContext).form,
               color: theme.grayText,
               border: "0.1rem solid " + theme.grayText,
               borderRadius: "0.7rem",
@@ -129,7 +129,7 @@ const Overlay = styled(
             }}
             style={{
               height: "2.7rem",
-              backgroundColor: useContext(ThemeContext).background,
+              backgroundColor: useContext(ThemeContext).form,
               color: theme.grayText,
               border: "0.1rem solid " + theme.grayText,
               borderRadius: "0.7rem",
@@ -154,7 +154,7 @@ const Overlay = styled(
             }}
             style={{
               height: "2.7rem",
-              backgroundColor: useContext(ThemeContext).background,
+              backgroundColor: useContext(ThemeContext).form,
               border: "0.1rem solid " + theme.grayText,
               borderRadius: "0.7rem",
               cursor: "pointer",
@@ -204,8 +204,8 @@ const Overlay = styled(
   font-weight: ${theme.weightText};
   margin-bottom: 2ch;
   border-radius: 0.7rem;
-  background-color: ${() => useContext(ThemeContext).background};
-
+  background-color: ${() => useContext(ThemeContext).form};
+  z-index: 1;
   ::-webkit-scrollbar {
     width: 1rem;
   }
@@ -216,7 +216,7 @@ const Overlay = styled(
   }
 
   ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+    border-radius: 1rem;
     background-image: -webkit-gradient(
       linear,
       left top,
@@ -232,7 +232,22 @@ const handleTitle = (
   input: React.FocusEvent<HTMLInputElement>,
   info: iTaskInfo
 ) => {
-  info.title = input.target.value;
+  let dup = false;
+  getSelectedBoard().status.forEach((status) => {
+    status.tasks.forEach((task) => {
+      if (task.title === input.target.value) {
+        input.target.value = "";
+        input.target.placeholder = "Task name taken";
+      }
+    });
+  });
+  if (input.currentTarget.value.length > 25) {
+    input.currentTarget.placeholder =
+      "Task name mustn't be greater than 25 characters";
+    input.currentTarget.value = "";
+  } else if (!dup) {
+    info.title = input.target.value;
+  }
 };
 
 const handleDesc = (
@@ -254,7 +269,11 @@ const StatusOptions = () => {
   return (
     <>
       {getStatuses().map((status: string) => (
-        <option value={status} key={key++}>
+        <option
+          value={status}
+          key={key++}
+          style={{ fontWeight: theme.weightText, color: theme.grayText }}
+        >
           {status}
         </option>
       ))}
@@ -404,7 +423,7 @@ const SubtaskInput = (props: {
           borderRadius: "0.7rem",
           fontSize: theme.sizeText,
           fontWeight: theme.weightText,
-          backgroundColor: useContext(ThemeContext).background,
+          backgroundColor: useContext(ThemeContext).form,
           marginRight: "1ch",
           boxSizing: "border-box",
           padding: "0 0.5ch 0 0.5ch",
@@ -447,7 +466,17 @@ const handleSubtask = (
   input: React.FocusEvent<HTMLInputElement>,
   myKey: number
 ) => {
-  info.subtasks[myKey] = input.target.value;
+  let dup = false;
+  info.subtasks.forEach((subtask) => {
+    if (subtask === input.target.value) {
+      input.target.value = "";
+      input.target.placeholder = "Subtask name taken";
+      dup = true;
+    }
+  });
+  if (!dup) {
+    info.subtasks[myKey] = input.target.value;
+  }
 };
 
 export default TaskAdd;

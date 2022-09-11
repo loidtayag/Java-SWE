@@ -81,14 +81,15 @@ const DeleteOverlay = styled(
         flexDirection: "column",
         padding: "3rem",
         justifyContent: "space-between",
-        backgroundColor: useContext(ThemeContext).background,
+        backgroundColor: useContext(ThemeContext).form,
         borderRadius: "0.7rem",
         // https://stackoverflow.com/questions/1776915/how-can-i-center-an-absolutely-positioned-element-in-a-div
         position: "absolute",
         left: "50%",
         top: "50%",
-        maxWidth: "30vw",
+        width: "30vw",
         transform: "translate(-50%, -50%)",
+        zIndex: "1",
       }}
     >
       <Exit
@@ -107,30 +108,39 @@ const DeleteOverlay = styled(
           }}
         />
       </Exit>
-      <label
+      <div
         style={{
-          marginBottom: "2ch",
-          color: useContext(ThemeContext).headers,
-          fontSize: theme.sizeText,
-          fontWeight: theme.weightText,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        Press below to confirm deletion of board "{props.deleteOverlay[2]}"
-      </label>
-      <input
-        type={"submit"}
-        value={"Delete Board"}
-        style={{
-          height: "3.5rem",
-          backgroundColor: theme.clickable,
-          color: useContext(ThemeContext).headers,
-          border: "none",
-          borderRadius: ".7rem",
-          fontSize: theme.sizeText,
-          fontWeight: theme.weightText,
-          cursor: "pointer",
-        }}
-      />
+        <label
+          style={{
+            marginBottom: "2ch",
+            color: useContext(ThemeContext).headers,
+            fontSize: theme.sizeText,
+            fontWeight: theme.weightText,
+          }}
+        >
+          Press below to confirm deletion of board "{props.deleteOverlay[2]}"
+        </label>
+        <input
+          type={"submit"}
+          value={"Delete Board"}
+          style={{
+            height: "3.5rem",
+            backgroundColor: theme.clickable,
+            color: useContext(ThemeContext).headers,
+            border: "none",
+            borderRadius: ".7rem",
+            fontSize: theme.sizeText,
+            fontWeight: theme.weightText,
+            cursor: "pointer",
+            width: "100%",
+          }}
+        />
+      </div>
     </form>
   )
 )`
@@ -390,13 +400,14 @@ const Overlay = styled(
         flexDirection: "column",
         padding: "2.5rem",
         justifyContent: "space-between",
-        backgroundColor: useContext(ThemeContext).background,
+        backgroundColor: useContext(ThemeContext).form,
         borderRadius: "0.7rem",
         // https://stackoverflow.com/questions/1776915/how-can-i-center-an-absolutely-positioned-element-in-a-div
         position: "absolute",
         left: "50%",
         top: "50%",
         transform: "translate(-50%, -50%)",
+        zIndex: "1",
       }}
     >
       <Exit
@@ -478,7 +489,7 @@ const BoardName = () => (
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
-      backgroundColor: useContext(ThemeContext).background,
+      backgroundColor: useContext(ThemeContext).form,
       borderRadius: "0.5rem",
       fontSize: theme.sizeText,
       fontWeight: theme.weightText,
@@ -500,7 +511,7 @@ const BoardName = () => (
       required={true}
       style={{
         height: "2.7rem",
-        backgroundColor: useContext(ThemeContext).background,
+        backgroundColor: useContext(ThemeContext).form,
         color: theme.grayText,
         border: "0.1rem solid " + theme.grayText,
         borderRadius: "0.7rem",
@@ -518,13 +529,12 @@ const BoardName = () => (
         });
         if (!valid) {
           event.currentTarget.value = "";
-          event.currentTarget.placeholder =
-            "Another board already has that name, please use another name";
+          event.currentTarget.placeholder = "Board name taken";
         }
         if (event.currentTarget.value.length > 20) {
           event.currentTarget.value = "";
           event.currentTarget.placeholder =
-            "Board name must not be greater than 20 characters";
+            "Board name mustn't be greater than 20 characters";
         }
       }}
     />

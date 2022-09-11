@@ -65,7 +65,10 @@ function App() {
           <TaskAdd setSelectedBoard={setSelectedBoard} />
           <Settings />
         </Header>
-        <ViewBoard selectedBoard={selectedBoard} />
+        <ViewBoard
+          selectedBoard={selectedBoard}
+          setSelectedBoard={setSelectedBoard}
+        />
       </Grid>
     </ThemeContext.Provider>
   );
