@@ -25,6 +25,7 @@ function ViewTask({
   };
 }) {
   let key = 0;
+  data.current.hack = selectedBoard.status[why.status].name;
 
   return (
     <>

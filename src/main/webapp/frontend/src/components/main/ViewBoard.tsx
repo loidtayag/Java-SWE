@@ -181,11 +181,12 @@ function handleViewTask(
 ) {
   const temp = selectedBoard.status[why.status].tasks[why.task];
   let moveTo = 0;
-
   let status = data.current.hack;
-
-  for (moveTo; selectedBoard.status[moveTo].name !== status; ) {
-    moveTo += 1;
+  while (moveTo !== selectedBoard.status.length) {
+    if (selectedBoard.status[moveTo].name === status) {
+      break;
+    }
+    moveTo++;
   }
 
   if (selectedBoard.status[why.status].name !== status) {
@@ -279,9 +280,9 @@ function setDragula(
         }
       });
       /* Rewriting local storage, no need to set state since dragula already does it */
-      const newBoard = getBoards();
-      newBoard[getSelectedBoardIndex()] = BUG;
-      localStorage.setItem("boards", JSON.stringify(newBoard));
+      const newBoards = getBoards();
+      newBoards[getSelectedBoardIndex()] = BUG;
+      localStorage.setItem("boards", JSON.stringify(newBoards));
     }
   );
 }
