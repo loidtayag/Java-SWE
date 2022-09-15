@@ -1,8 +1,8 @@
-React Typescript project 
+Kanban web-app being built with the PERN stack and Typescript.
 
-Checklist of plans:
-Frontend: Done
-Backend: To Do during winter break
+Plans:
+Frontend: during summer.
+Backend: during winter break.
 
 ## Acknowledgements
 
