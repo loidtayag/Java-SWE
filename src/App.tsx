@@ -41,41 +41,44 @@ function App() {
 
   return (
     <ThemeContext.Provider value={darkMode ? theme.dark : theme.light}>
-      <GlobalStyles />
-      <Grid id={showSidebar ? "showSidebar" : "hideSidebar"}>
-        {showSidebar && (
-          <Sidebar>
-            <Logo />
-            <BoardTitles boardNames={boardNames} setBoardNames={setBoardNames} setSelectedBoard={setSelectedBoard} />
-            <div>
-              <DayOrNight toggleTheme={toggleTheme} />
-              <ToggleSidebar
-                setShowSidebar={() => {
-                  localStorage.setItem("sidebar", !showSidebar as unknown as string)
-                  setShowSidebar(!showSidebar);
-                }}
-              />
-            </div>
-          </Sidebar>
-        )}
-        {!showSidebar && (
-          <HiddenSidebar
-            onClick={() => {
-              localStorage.setItem("sidebar", !showSidebar as unknown as string)
-              setShowSidebar(!showSidebar);
-            }}
+      <div style={{ maxWidth: "100vw", maxHeight: "100vh" }}>
+        <GlobalStyles />
+        <Grid id={showSidebar ? "showSidebar" : "hideSidebar"}>
+          {showSidebar && (
+            <Sidebar>
+              <Logo />
+              <BoardTitles boardNames={boardNames} setBoardNames={setBoardNames} setSelectedBoard={setSelectedBoard} />
+              <div>
+                <DayOrNight toggleTheme={toggleTheme} />
+                <ToggleSidebar
+                  setShowSidebar={() => {
+                    localStorage.setItem("sidebar", !showSidebar as unknown as string);
+                    setShowSidebar(!showSidebar);
+                  }}
+                />
+              </div>
+            </Sidebar>
+          )}
+          {!showSidebar && (
+            <HiddenSidebar
+              onClick={() => {
+                localStorage.setItem("sidebar", !showSidebar as unknown as string);
+                setShowSidebar(!showSidebar);
+              }}
+            />
+          )}
+          <Header>
+            <BoardName boardNames={boardNames} setBoardNames={setBoardNames} selectedBoard={selectedBoard}
+                       setSelectedBoard={setSelectedBoard}>{selectedBoard.name}</BoardName>
+            <TaskAdd setSelectedBoard={setSelectedBoard} />
+            <Settings />
+          </Header>
+          <ViewBoard
+            selectedBoard={selectedBoard}
+            setSelectedBoard={setSelectedBoard}
           />
-        )}
-        <Header>
-          <BoardName boardNames={boardNames} setBoardNames={setBoardNames} selectedBoard={selectedBoard} setSelectedBoard={setSelectedBoard}>{selectedBoard.name}</BoardName>
-          <TaskAdd setSelectedBoard={setSelectedBoard} />
-          <Settings />
-        </Header>
-        <ViewBoard
-          selectedBoard={selectedBoard}
-          setSelectedBoard={setSelectedBoard}
-        />
-      </Grid>
+        </Grid>
+      </div>
     </ThemeContext.Provider>
   );
 }

@@ -258,7 +258,7 @@ function handleViewTask(
 
 const styleColumn = css`
   margin: 3ch 0 3ch 3ch;
-  min-width: 24%;
+  min-width: 22%;
   max-height: 88%;
 `;
 
@@ -407,7 +407,6 @@ const Tasks = styled(
     </div>
   )
 )`
-  ${scrollTheme};
   min-height: 100%;
 `;
 
@@ -602,13 +601,19 @@ const Task = styled(
                 cursor: "pointer",
                 display: "flex",
                 flexDirection: "column",
-                fontWeight: "inherit"
+                fontWeight: "inherit",
+                overflow: "clip",
+                // Since parent's parent is relative the width is expandable,
+                // this makes it so that it fits to 100% of the parent's
+                // parent width, if left out parent's parent expands to
+                // accommodate the extra width needed
+                maxWidth: "100%"
               }}
             >
               <p
                 style={{
                   color: useContext(ThemeContext)?.headers,
-                  fontWeight: "inherit"
+                  overflow: "clip"
                 }}
               >
                 {task.title}

@@ -64,4 +64,8 @@ export const scrollTheme = css`
     color-stop(0.5, rgb(73, 125, 189)),
     color-stop(0.25, rgb(43, 75, 172)));
   }
+
+  ::-webkit-scrollbar-corner {
+    background: rgba(0,0,0,0);
+  }
 `;
