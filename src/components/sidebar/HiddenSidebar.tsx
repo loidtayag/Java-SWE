@@ -1,35 +1,28 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { theme, ThemeContext } from "../../utils/helpers";
+import { theme, ThemeContext } from "../../styles/theme.styles";
 
-export default function HiddenSidebar({
-  setIsSidebar,
-}: {
-  setIsSidebar: () => void;
-}) {
+export default function HiddenSidebar({onClick}: {onClick: () => void}) {
+
   return (
-    <Visual onclick={setIsSidebar}>
-      <Embed />
+    <Visual onClick={onClick}>
+      <Embed alt= "Reveal sidebar" src="/show.svg"/>
     </Visual>
   );
 }
 
-const Visual = styled.button.attrs(({ onclick }: { onclick: () => void }) => ({
-  onClick: onclick,
-}))<{ onclick: () => void }>`
+const Visual = styled.button`
   position: fixed;
   bottom: 1.3ch;
-  left: 3ch;
+  left: 3.5ch;
   cursor: pointer;
   border-style: none;
-  background-color: ${() => useContext(ThemeContext)?.foreground};
   isolation: isolate;
+  background-color: ${() => useContext(ThemeContext)?.foreground};
+  z-index: 1;
 `;
 
-const Embed = styled.img.attrs(() => ({
-  alt: "Reveal sidebar",
-  src: "/show.svg",
-}))`
+const Embed = styled.img`
   width: 3.5rem;
-  filter: ${theme.grayImg};
+  filter: ${theme.iconColor};
 `;

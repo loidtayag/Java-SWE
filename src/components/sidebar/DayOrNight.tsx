@@ -1,32 +1,27 @@
-import React, { useContext } from "react";
-import styled, { css } from "styled-components";
-import { theme, ThemeContext } from "../../utils/helpers";
+import React, {useContext} from "react";
+import styled, {css} from "styled-components";
+import {theme, ThemeContext} from "../../styles/theme.styles";
 
-export default function DayOrNight({
-  toggleTheme,
-}: {
-  toggleTheme: () => void;
-}) {
-  return (
-    <Flex>
-      <Moon />
-      {/* Since Toggle has children with position absolute, Toggle's width is 0px if <div> is left out */}
-      <div>
-        <Toggle
-          onClick={() => {
-            setTimeout(() => {
-              toggleTheme();
-            }, 750);
-          }}
-        >
-          <Input type="checkbox" toggleTheme={toggleTheme} />
-          <Outer />
-          <Inner />
-        </Toggle>
-      </div>
-      <Sun />
-    </Flex>
-  );
+export default function DayOrNight({toggleTheme}: { toggleTheme: () => void; }) {
+    return (
+        <Flex>
+            <Moon/>
+            {/* Since Toggle has children with position absolute, Toggle's width is 0px if <div> is left out */}
+            <div>
+                <Toggle
+                    onClick={() => {
+                        console.log("E")
+                        toggleTheme();
+                    }}
+                >
+                    <Input type="checkbox"/>
+                    <Outer/>
+                    <Inner/>
+                </Toggle>
+            </div>
+            <Sun/>
+        </Flex>
+    );
 }
 
 const Flex = styled.div`
@@ -41,11 +36,11 @@ const Flex = styled.div`
 `;
 
 const Sun = styled.img.attrs(() => ({
-  alt: "Light mode",
-  src: "/sun.svg",
+    alt: "Light mode",
+    src: "/sun.svg",
 }))`
   width: 3.7rem;
-  filter: ${theme.grayImg};
+  filter: ${theme.iconColor};
 `;
 
 const Toggle = styled.div`
@@ -75,10 +70,8 @@ const Inner = styled.div`
 `;
 
 const Input = styled.input.attrs(() => ({
-  defaultChecked: useContext(ThemeContext)?.headers === "#000000",
-}))<{
-  toggleTheme: () => void;
-}>`
+    defaultChecked: useContext(ThemeContext)?.headers === "#000000",
+}))`
   position: absolute;
   width: 4rem;
   height: 2rem;
@@ -86,28 +79,30 @@ const Input = styled.input.attrs(() => ({
   z-index: 1;
   cursor: pointer;
   /* Checked means circle is on right side */
+
   &:checked ~ ${Inner} {
     ${() =>
-      useContext(ThemeContext)?.foreground === "#000000"
-        ? css`
-            transform: translate(-2.1rem, 0);
-            transition: transform 0.8s;
-          `
-        : css`
-            transform: translate(2.1rem, 0);
-            transition: transform 0.8s;
-          `}
+            useContext(ThemeContext)?.foreground === "#000000"
+                    ? css`
+                      transform: translate(-2.1rem, 0);
+                      transition: transform .8s;
+                    `
+                    : css`
+                      transform: translate(2.1rem, 0);
+                      transition: transform .8s;
+                    `}
   }
+
   &:not(:checked) ~ ${Inner} {
     transform: translate(0, 0);
-    transition: transform 0.8s;
+    transition: transform .8s;
   }
 `;
 
 const Moon = styled.img.attrs(() => ({
-  alt: "Dark mode",
-  src: "/moon.svg",
+    alt: "Dark mode",
+    src: "/moon.svg",
 }))`
   width: 4rem;
-  filter: ${theme.grayImg};
+  filter: ${theme.iconColor};
 `;

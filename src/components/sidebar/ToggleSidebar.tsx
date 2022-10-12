@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import React, { ReactNode } from "react";
-import { Text, theme } from "../../utils/helpers";
+import { textTheme, theme } from "../../styles/theme.styles";
 
 export default function ToggleSidebar({
-  setShowSidebar,
-}: {
+                                        setShowSidebar
+                                      }: {
   setShowSidebar: () => void;
 }) {
   return (
@@ -25,9 +25,9 @@ const Flex = styled.div`
 
 const Visual = styled.button.attrs(
   ({
-    onClick: onClick,
-    children,
-  }: {
+     onClick,
+     children
+   }: {
     onClick: () => void;
     children: ReactNode;
   }) => ({ onClick: onClick, children: children })
@@ -46,11 +46,12 @@ const Visual = styled.button.attrs(
 
 const Embed = styled.img.attrs(() => ({
   alt: "Hide sidebar",
-  src: "/hide.svg",
+  src: "/hide.svg"
 }))`
-  filter: ${theme.grayImg};
+  filter: ${theme.iconColor};
 `;
 
-const Textual = styled(Text)`
-  color: ${theme.grayText};
+const Textual = styled.p`
+  color: ${theme.textColor};
+  ${textTheme};
 `;

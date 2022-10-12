@@ -1,6 +1,6 @@
-import { iBoard, iTask } from "../../utils/localStorage";
+import { iBoard, iTask } from "../../utils/database";
 import styled from "styled-components";
-import { styledText, theme, ThemeContext } from "../../utils/helpers";
+import { textTheme, theme, ThemeContext } from "../../styles/theme.styles";
 import React, { MutableRefObject, useContext, useState } from "react";
 import { getTotalDone } from "./ViewBoard";
 import { InputModal, LabelModal } from "./OverlayModal";
@@ -49,7 +49,7 @@ function ViewTask({
             <option
               key={key++}
               value={status.name}
-              style={{ fontWeight: theme.weightText }}
+              style={{ fontWeight: theme.textWeight }}
             >
               {status.name}
             </option>
@@ -81,8 +81,7 @@ const Subtask = styled(
   ({
     selectedBoard,
     selectedTask,
-    data,
-    why,
+     why,
   }: {
     selectedBoard: iBoard;
     selectedTask: iTask;
@@ -140,18 +139,18 @@ const Subtask = styled(
                   marginBottom: "0",
                   minWidth: "0%",
                   maxWidth: theme.iconSize,
-                  marginRight: "1ch",
+                  marginRight: "0ch",
                 }}
               ></InputModal>
               <LabelModal
                 style={{
-                  color: theme.grayText,
+                  color: theme.textColor,
                   marginBottom: "0",
                   position: "relative",
                   wordWrap: "break-word",
                   maxWidth: "28vw",
                   left: "1ch",
-                  top: "1ch",
+                  // top: "1ch",
                 }}
               >
                 {selectedTask.subtasks[otherKey].desc}
@@ -165,14 +164,14 @@ const Subtask = styled(
 )``;
 
 const Title = styled.p`
-  ${styledText};
+  ${textTheme};
   color: ${() => useContext(ThemeContext)?.headers};
   font-size: 100%;
   margin-bottom: 0.3rem;
 `;
 
 const Desc = styled.p`
-  ${styledText};
+  ${textTheme};
   margin-bottom: 2rem;
   word-wrap: break-word;
 `;
@@ -180,11 +179,11 @@ const Desc = styled.p`
 const Status = styled.select`
   height: 2.7rem;
   background-color: ${() => useContext(ThemeContext)?.form};
-  border: 0.1rem solid ${theme.grayText};
+  border: 0.1rem solid ${theme.textColor};
   border-radius: 0.7rem;
   cursor: pointer;
-  ${styledText};
-  color: ${theme.grayText};
+  ${textTheme};
+  color: ${theme.textColor};
   width: fit-content;
 `;
 

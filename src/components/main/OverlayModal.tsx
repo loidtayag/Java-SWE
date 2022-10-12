@@ -1,11 +1,11 @@
 import React, { ReactNode, useContext } from "react";
-import { styledText, theme, ThemeContext } from "../../utils/helpers";
+import { textTheme, theme, ThemeContext } from "../../styles/theme.styles";
 import styled from "styled-components";
 
 function OverlayModal({
-  onSubmit,
-  children,
-}: {
+                        onSubmit,
+                        children
+                      }: {
   setOverlay: (value: boolean) => void;
   onSubmit: () => void;
   children: ReactNode;
@@ -16,7 +16,7 @@ function OverlayModal({
 const FormModal = styled.form.attrs(
   ({ onSubmit }: { onSubmit: () => void }) => ({
     onSubmit: onSubmit,
-    id: "dfs",
+    id: "dfs"
   })
 )`
   display: flex;
@@ -27,8 +27,8 @@ const FormModal = styled.form.attrs(
   border-radius: 0.7rem;
   width: 30vw;
   color: ${() => useContext(ThemeContext)?.headers};
-  font-size: ${theme.sizeText};
-  font-weight: ${theme.weightText};
+  font-size: ${theme.textSize};
+  font-weight: ${theme.textWeight};
   margin-bottom: 2ch;
   background-color: ${() => useContext(ThemeContext)?.form};
   z-index: 1;
@@ -40,8 +40,8 @@ const FormModal = styled.form.attrs(
 `;
 
 export function ExitModal({
-  setOverlay,
-}: {
+                            setOverlay
+                          }: {
   setOverlay: (value: boolean) => void;
 }) {
   return (
@@ -75,13 +75,13 @@ export const Button = styled.button`
 `;
 
 export const Img = styled.img`
-  filter: ${theme.grayImg};
+  filter: ${theme.iconColor};
   width: ${theme.iconSize};
 `;
 
 export const LabelModal = styled.label`
   margin-bottom: 0.3rem;
-  ${styledText};
+  ${textTheme};
   color: ${() => useContext(ThemeContext)?.headers};
 `;
 
@@ -90,17 +90,17 @@ export const InputModal = styled.input<{
 }>`
   height: ${({ type }) => (type === "submit" ? "3.5rem" : "2.7rem")};
   background-color: ${({ type }) =>
-    type === "submit" ? theme.clickable : "inherit"};
+          type === "submit" ? theme.clickable : "inherit"};
   border: ${({ type }) =>
-    type === "submit" ? "none" : "0.1rem solid " + theme.grayText};
+          type === "submit" ? "none" : "0.1rem solid " + theme.textColor};
   border-radius: 0.7rem;
   cursor: ${({ type }) => (type === "submit" ? "pointer" : "")};
   margin-bottom: ${({ type }) => (type === "submit" ? "" : "2ch")};
-  ${styledText};
+  ${textTheme};
   color: ${({ type }) =>
-    type === "submit"
-      ? () => useContext(ThemeContext)?.headers
-      : theme.grayText};
+          type === "submit"
+                  ? () => useContext(ThemeContext)?.headers
+                  : theme.iconColor};
   padding: ${({ type }) => (type === "submit" ? "" : "0 0.5ch 0 0.5ch")};
   min-width: 100%;
 `;

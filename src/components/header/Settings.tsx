@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { theme } from "../../utils/helpers";
+import { theme } from "../../styles/theme.styles";
 
 const Settings = () => {
   return (
@@ -21,7 +21,7 @@ const Img = styled.img.attrs(() => ({
   src: "/gear.svg",
 }))`
   width: ${theme.iconSize};
-  filter: ${theme.grayImg};
+  filter: ${theme.iconColor};
 `;
 
 export default Settings;

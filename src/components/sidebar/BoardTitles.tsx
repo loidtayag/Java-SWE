@@ -1,21 +1,10 @@
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, {ReactNode, useContext, useEffect, useState} from "react";
 import styled from "styled-components";
-import { iBoard } from "../../utils/localStorage";
-import {
-  getBoards,
-  getSelectedBoard,
-  getSelectedBoardIndex,
-  defaultBoard,
-  Text,
-  theme,
-  ThemeContext,
-  initBoards,
-} from "../../utils/helpers";
+import {iBoard} from "../../utils/database";
+import {defaultBoard, getBoards, getSelectedBoard, getSelectedBoardIndex, initBoards,} from "../../utils/helpers";
+import {textTheme, theme, ThemeContext} from "../../styles/theme.styles";
 
-const BoardTitles = (props: { setSelectedBoard: (value: iBoard) => void }) => {
-  const [boardNames, setBoardNames] = useState<string[]>(
-    getBoards().map((board: iBoard) => board.name)
-  );
+const BoardTitles = (props: { boardNames: string[], setBoardNames: (value: string[]) => void, setSelectedBoard: (value: iBoard) => void }) => {
   const [isOverlay, setIsOverlay] = useState(false);
   const [deleteOverlay, setDeleteOverlay] = useState<any[]>([
     false,
@@ -25,45 +14,25 @@ const BoardTitles = (props: { setSelectedBoard: (value: iBoard) => void }) => {
   const dragulaRefs: (HTMLDivElement | null)[] = [];
 
   useEffect(() => {
-    let dragula = require("react-dragula")();
-    dragulaRefs.forEach((ref) => {
-      dragula.containers.push(ref);
-    });
-    dragula.on("drop", (element: HTMLDivElement) => {
-      /* Get target's new index */
-      let oldItem = 0;
-      let temp = element.previousSibling;
-      while (temp) {
-        oldItem++;
-        temp = temp.previousSibling;
-      }
-
-      /* Swap two boards in local storage and rewrite */
-      let movedItem = 0;
-      let boards = getBoards();
-      while (boards[movedItem].name !== element.innerText) {
-        movedItem++;
-      }
-      console.log(oldItem + " " + movedItem);
-      let oldBoard = boards[oldItem];
-      let newBoard = boards[movedItem];
-      boards[oldItem] = newBoard;
-      boards[movedItem] = oldBoard;
-
-      localStorage.setItem("boards", JSON.stringify(boards));
-      localStorage.setItem("selectedBoard", oldItem as unknown as string);
-      window.location.reload();
-    });
+    // let dragula = require("react-dragula")();
+    // dragulaRefs.forEach((ref) => {
+    //   dragula.containers.push(ref);
+    // });
+    // dragula.on("drop", (element: HTMLDivElement, target: HTMLDivElement) => {
+    //   console.log(element.innerText);
+    //   console.log(target.innerText);
+    //   window.location.reload();
+    // });
   });
 
   return (
     <Flex>
       {createList(
         props.setSelectedBoard,
-        boardNames,
+        props.boardNames,
         setIsOverlay,
         dragulaRefs,
-        setBoardNames,
+        props.setBoardNames,
         setDeleteOverlay
       )}
       {deleteOverlay[0] && (
@@ -75,8 +44,8 @@ const BoardTitles = (props: { setSelectedBoard: (value: iBoard) => void }) => {
       {isOverlay && (
         <Overlay
           className={"foo"}
-          boardNames={boardNames}
-          setBoardNames={setBoardNames}
+          boardNames={props.boardNames}
+          setBoardNames={props.setBoardNames}
           setIsOverlay={setIsOverlay}
         />
       )}
@@ -130,7 +99,7 @@ const DeleteOverlay = styled(
           style={{
             cursor: "pointer",
             width: theme.iconSize,
-            filter: theme.grayImg,
+            filter: theme.iconColor,
           }}
         />
       </Exit>
@@ -145,8 +114,8 @@ const DeleteOverlay = styled(
           style={{
             marginBottom: "2ch",
             color: useContext(ThemeContext)?.headers,
-            fontSize: theme.sizeText,
-            fontWeight: theme.weightText,
+            fontSize: theme.textSize,
+            fontWeight: theme.textWeight,
           }}
         >
           Press below to confirm deletion of board "{props.deleteOverlay[2]}"
@@ -160,8 +129,8 @@ const DeleteOverlay = styled(
             color: useContext(ThemeContext)?.headers,
             border: "none",
             borderRadius: ".7rem",
-            fontSize: theme.sizeText,
-            fontWeight: theme.weightText,
+            fontSize: theme.textSize,
+            fontWeight: theme.textWeight,
             cursor: "pointer",
             width: "100%",
           }}
@@ -174,6 +143,14 @@ const DeleteOverlay = styled(
   width: 30vw;
   left: 35vw;
   background-color: #2c2c38;
+`;
+
+export const Exit = styled.button`
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  background-color: inherit;
+  border: none;
 `;
 
 const createList = (
@@ -211,16 +188,20 @@ const createList = (
 
 const BoardTotal = (boardTotal: number) => (
   <li key={0} style={{ marginTop: "4ch", marginBottom: "1.5ch" }}>
-    <Text
+    <P
       style={{
-        color: theme.grayText,
+        color: theme.textColor,
         marginLeft: "3px",
       }}
     >
       ALL BOARDS ({boardTotal})
-    </Text>
+    </P>
   </li>
 );
+
+const P = styled.p`
+  ${textTheme}
+`
 
 const BoardIndividual = (
   setSelectedBoard: (value: iBoard) => void,
@@ -236,7 +217,6 @@ const BoardIndividual = (
       ref={(ref) => {
         refs.push(ref);
       }}
-      style={{ cursor: "grab" }}
     >
       <li
         style={{
@@ -286,18 +266,18 @@ const BoardIndividual = (
                   "invert(66%) sepia(9%) saturate(356%) hue-rotate(195deg) brightness(85%) contrast(85%)",
               }}
             />
-            <Text
+            <P
               style={{
                 marginLeft: "2ch",
                 color:
                   getSelectedBoard().name === boardName
                     ? "inherit"
-                    : theme.grayText,
+                    : theme.textColor,
                 display: "inline-block",
               }}
             >
               {boardName}
-            </Text>
+            </P>
           </button>
           <button
             style={{
@@ -348,7 +328,7 @@ const BoardIndividual = (
               alt="Delete subtask"
               style={{
                 width: theme.iconSize,
-                filter: theme.grayImg,
+                filter: theme.iconColor,
                 cursor: "pointer",
               }}
             />
@@ -403,9 +383,9 @@ const BoardCreate = (key: number, setIsOverlay: (value: boolean) => void) => (
         width: theme.iconSize,
       }}
     />
-    <Text style={{ marginLeft: "2ch", color: theme.clickable }}>
+    <P style={{ marginLeft: "2ch", color: theme.clickable }}>
       + Create New Board
-    </Text>
+    </P>
   </li>
 );
 
@@ -449,7 +429,7 @@ const Overlay = styled(
           style={{
             cursor: "pointer",
             width: theme.iconSize,
-            filter: theme.grayImg,
+            filter: theme.iconColor,
           }}
         />
       </Exit>
@@ -463,8 +443,8 @@ const Overlay = styled(
           color: useContext(ThemeContext)?.headers,
           border: "none",
           borderRadius: ".7rem",
-          fontSize: theme.sizeText,
-          fontWeight: theme.weightText,
+          fontSize: theme.textSize,
+          fontWeight: theme.textWeight,
           cursor: "pointer",
         }}
       />
@@ -475,14 +455,6 @@ const Overlay = styled(
   width: 30vw;
   left: 35vw;
   background-color: #2c2c38;
-`;
-
-export const Exit = styled.button`
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
-  background-color: inherit;
-  border: none;
 `;
 
 const handleOverlay = (
@@ -518,8 +490,8 @@ const BoardName = () => (
       justifyContent: "space-between",
       backgroundColor: useContext(ThemeContext)?.form,
       borderRadius: "0.5rem",
-      fontSize: theme.sizeText,
-      fontWeight: theme.weightText,
+      fontSize: theme.textSize,
+      fontWeight: theme.textWeight,
       marginBottom: "2ch",
     }}
   >
@@ -539,11 +511,11 @@ const BoardName = () => (
       style={{
         height: "2.7rem",
         backgroundColor: useContext(ThemeContext)?.form,
-        color: theme.grayText,
-        border: "0.1rem solid " + theme.grayText,
+        color: theme.textColor,
+        border: "0.1rem solid " + theme.textColor,
         borderRadius: "0.7rem",
-        fontSize: theme.sizeText,
-        fontWeight: theme.weightText,
+        fontSize: theme.textSize,
+        fontWeight: theme.textWeight,
         padding: "0 0.5ch 0 0.5ch",
       }}
       onBlur={(event) => {

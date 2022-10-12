@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import { ThemeContext } from "../../utils/helpers";
+import { ThemeContext } from "../../styles/theme.styles";
 
 const Sidebar = styled.div`
   grid-area: sidebar;

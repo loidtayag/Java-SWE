@@ -1,35 +1,16 @@
-import {
-  getBoards,
-  getSelectedBoard,
-  getSelectedBoardIndex,
-  styledScroll,
-  styledText,
-  theme,
-  ThemeContext,
-} from "../../utils/helpers";
-import { iBoard, iStatus, iTask } from "../../utils/localStorage";
+import { getBoards, getSelectedBoard, getSelectedBoardIndex } from "../../utils/helpers";
+import { scrollTheme, textTheme, theme, ThemeContext } from "../../styles/theme.styles";
+import { iBoard, iStatus, iTask } from "../../utils/database";
 import styled, { css } from "styled-components";
-import React, {
-  MutableRefObject,
-  ReactNode,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import OverlayModal, {
-  ExitModal,
-  ExitModalSubmit,
-  InputModal,
-  LabelModal,
-} from "./OverlayModal";
+import React, { MutableRefObject, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import OverlayModal, { ExitModal, ExitModalSubmit, InputModal, LabelModal } from "./OverlayModal";
 import CreateStatus from "./CreateStatus";
 import ViewTask from "./ViewTask";
 
 const ViewBoard = ({
-  selectedBoard,
-  setSelectedBoard,
-}: {
+                     selectedBoard,
+                     setSelectedBoard
+                   }: {
   selectedBoard: iBoard;
   setSelectedBoard: (value: iBoard) => void;
 }) => {
@@ -44,10 +25,12 @@ const ViewBoard = ({
   const why = useRef({
     status: 0,
     task: 0,
-    setTaskView: setViewTask,
+    setTaskView: setViewTask
   }).current;
   let [color, setColor] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(0);
+  let stupidHack: number[] = [];
+  let stupidHackIndex = -1;
 
   useEffect(() => {
     setDragula(totalStatuses, statusesRef);
@@ -55,41 +38,58 @@ const ViewBoard = ({
 
   return (
     <Div>
-      {selectedBoard.status.map((status: iStatus) => (
-        <Status key={statusKey}>
-          <StatusHeader>
-            <StatusColor
-              className="foo"
-              color={colors[statusKey]}
-              statusKey={statusKey++}
-              setViewTask={setColor}
-              colorState={color}
-              selectedStatus={selectedStatus}
-              setSelectedStatus={setSelectedStatus}
-            />
-            <p>
-              {status.name} ({status.tasks.length})
-            </p>
-          </StatusHeader>
-          <Tasks
-            className="foo"
-            statusesRefs={statusesRef}
-            totalStatuses={totalStatuses++}
-          >
-            {status.tasks.map((task: iTask) => (
-              <Task
+      {selectedBoard.status.map((status: iStatus) => {
+        stupidHack.push(0);
+        stupidHackIndex += 1;
+        if (stupidHackIndex !== 0) {
+          stupidHack[stupidHackIndex] = stupidHack[stupidHackIndex - 1] + 1;
+        }
+        const temp = stupidHack[stupidHackIndex];
+
+        return (
+          <Status key={statusKey}>
+            <StatusHeader onMouseOver={() => {
+              // @ts-ignore
+              document.getElementById(`status${temp + 1}`).style.display = "block";
+            }} onMouseLeave={() => {
+              // @ts-ignore
+              document.getElementById(`status${temp + 1}`).style.display = "none";
+            }}>
+              <StatusColor
                 className="foo"
-                task={task}
-                key={taskKey++}
-                onClick={why}
-                selectedBoard={selectedBoard}
-                selectedTask={task}
-                setTaskView={setSelectedBoard}
+                color={colors[statusKey]}
+                statusKey={statusKey++}
+                setViewTask={setColor}
+                colorState={color}
+                selectedStatus={selectedStatus}
+                setSelectedStatus={setSelectedStatus}
               />
-            ))}
-          </Tasks>
-        </Status>
-      ))}
+              <p>
+                {status.name} ({status.tasks.length})
+              </p>
+            </StatusHeader>
+            <StyledBinStatus id={`status${statusKey}`} temp={temp} selectedBoard={selectedBoard}
+                             setSelectedBoard={setSelectedBoard} />
+            <Tasks
+              className="foo"
+              statusesRefs={statusesRef}
+              totalStatuses={totalStatuses++}
+            >
+              {status.tasks.map((task: iTask) => (
+                <Task
+                  className="foo"
+                  task={task}
+                  key={taskKey++}
+                  onClick={why}
+                  selectedBoard={selectedBoard}
+                  selectedTask={task}
+                  setTaskView={setSelectedBoard}
+                />
+              ))}
+            </Tasks>
+          </Status>
+        );
+      })}
       <NewStatus
         onClick={() => {
           setCreateStatus(true);
@@ -136,6 +136,63 @@ const ViewBoard = ({
   );
 };
 
+const StyledBinStatus = ({ id, temp, selectedBoard, setSelectedBoard }: {
+  id: string, temp: number; selectedBoard: iBoard;
+  setSelectedBoard: (value: iBoard) => void;
+}) => {
+  return <button
+    id={id}
+    onMouseOver={() => {
+      // @ts-ignore
+      document.getElementById(`status${temp + 1}`).style.display = "block";
+    }} onMouseLeave={() => {
+    // @ts-ignore
+    document.getElementById(`status${temp + 1}`).style.display = "none";
+  }}
+    onClick={() => {
+      let i = 0;
+      const statusName = document.getElementById(`status${temp + 1}`)?.previousSibling?.textContent?.split(" (")[0];
+      if (statusName) {
+        let found = false;
+        selectedBoard.status.forEach((status) => {
+          if (status.name === statusName) {
+            selectedBoard.status.splice(i, 1)
+            found = true;
+          }
+          else if (!found) {
+            i++
+          }
+        })
+      }
+      const newBoards = getBoards();
+      newBoards[getSelectedBoardIndex()].status.splice(i, 1)
+      localStorage.setItem("boards", JSON.stringify(newBoards))
+      setSelectedBoard(newBoards[getSelectedBoardIndex()])
+    }
+    }
+    style={{
+      backgroundColor: "inherit",
+      border: "none",
+      position: "absolute",
+      left: "92%",
+      top: "3%",
+      transform: "translate(-50%, -50%)",
+      display: "none",
+      opacity: "60%"
+    }}
+  >
+    <img
+      src="/delete-subtask.svg"
+      alt="Delete subtask"
+      style={{
+        width: theme.iconSize,
+        filter: theme.iconColor,
+        cursor: "pointer"
+      }}
+    />
+  </button>;
+};
+
 function handleCreateStatus(
   selectedBoard: iBoard,
   data: MutableRefObject<{
@@ -152,9 +209,9 @@ function handleCreateStatus(
       {
         title: "F",
         desc: "G",
-        subtasks: [],
-      },
-    ],
+        subtasks: []
+      }
+    ]
   };
 
   selectedBoard.status.push(newStatus);
@@ -202,6 +259,7 @@ function handleViewTask(
 const styleColumn = css`
   margin: 3ch 0 3ch 3ch;
   min-width: 24%;
+  max-height: 88%;
 `;
 
 function setDragula(
@@ -217,7 +275,7 @@ function setDragula(
   /* Writing to local storage the new index of the moved <Task> */
   dragula.on(
     "drop",
-    function (
+    function(
       element: HTMLDivElement,
       target: HTMLDivElement,
       source: HTMLDivElement
@@ -242,7 +300,7 @@ function setDragula(
           foundSourceStatus = true;
           let draggedNode = element.children[0].innerHTML
             .split("</p>")[0]
-            .split('">')[2];
+            .split("\">")[2];
           /* Find the selected task */
           status.tasks.forEach((task: iTask) => {
             /* Found the selected task */
@@ -314,24 +372,25 @@ const Div = styled.div`
   display: flex;
   flex-direction: row;
   background-color: ${() => useContext(ThemeContext)?.foreground};
-  ${styledText};
+  ${textTheme};
   max-width: 100%;
-  ${styledScroll};
+  ${scrollTheme};
   overflow: auto;
   max-height: 90vh;
 `;
 
 const Status = styled.div`
   ${styleColumn};
+  position: relative;
 `;
 
 const Tasks = styled(
   ({
-    className,
-    children,
-    statusesRefs,
-    totalStatuses,
-  }: {
+     className,
+     children,
+     statusesRefs,
+     totalStatuses
+   }: {
     className: string;
     children: ReactNode;
     statusesRefs: (HTMLDivElement | null)[];
@@ -348,7 +407,7 @@ const Tasks = styled(
     </div>
   )
 )`
-  ${styledScroll};
+  ${scrollTheme};
   min-height: 100%;
 `;
 
@@ -362,14 +421,11 @@ const StatusHeader = styled.div`
 
 const StatusColor = styled(
   ({
-    className,
-    color,
-    statusKey,
-    setViewTask,
-    colorState,
-    selectedStatus,
-    setSelectedStatus,
-  }: {
+     className,
+     color,
+     setViewTask,
+     setSelectedStatus
+   }: {
     className: string;
     color: string;
     statusKey: number;
@@ -405,7 +461,8 @@ const StatusColor = styled(
             statusIndex;
             getSelectedBoard().status[statusIndex].name !== statusName;
             statusIndex++
-          ) {}
+          ) {
+          }
           setSelectedStatus(statusIndex);
           setViewTask((prevCheck: boolean) => !prevCheck);
         }}
@@ -422,10 +479,10 @@ const StatusColor = styled(
 `;
 
 function ColorWheel({
-  setOverlay,
-  statusKey,
-  selectedStatus,
-}: {
+                      setOverlay,
+                      statusKey,
+                      selectedStatus
+                    }: {
   setOverlay: (value: boolean) => void;
   statusKey: number;
   selectedStatus: number;
@@ -450,7 +507,7 @@ function ColorWheel({
     }
     array.push(<br />);
   }
-  array.push(<p> </p>);
+  array.push(<p></p>);
   return <Container>{array.map((array) => array)}</Container>;
 }
 
@@ -465,20 +522,18 @@ const Container = styled.div`
 
 const Pixel = styled(
   ({
-    color,
-    myKey,
-    children,
-    className,
-    statusKey,
-    setViewTask,
-    setOverlay,
-    selectedStatus,
-  }) => {
+     color,
+     myKey,
+     children,
+     className,
+     setOverlay,
+     selectedStatus
+   }) => {
     return (
       <span
         key={myKey}
         className={className}
-        onClick={(event) => {
+        onClick={() => {
           const colors = JSON.parse(localStorage.getItem("colors") as string);
           colors[selectedStatus] = color;
           localStorage.setItem("colors", JSON.stringify(colors));
@@ -496,12 +551,12 @@ const Pixel = styled(
   className: string;
   setOverlay: (value: boolean) => void;
   statusKey: number;
-  setViewTask: (value: boolean) => void;
   selectedStatus: number;
 }>`
   background-color: ${({ color }) => color};
   color: ${({ color }) => color};
   cursor: pointer;
+
   :hover {
     caret-color: ${({ color }) => color};
   }
@@ -547,18 +602,18 @@ const Task = styled(
                 cursor: "pointer",
                 display: "flex",
                 flexDirection: "column",
-                fontWeight: "inherit",
+                fontWeight: "inherit"
               }}
             >
               <p
                 style={{
                   color: useContext(ThemeContext)?.headers,
-                  fontWeight: "inherit",
+                  fontWeight: "inherit"
                 }}
               >
                 {task.title}
               </p>
-              <p style={{ color: theme.grayText, fontWeight: "inherit" }}>
+              <p style={{ color: theme.textColor, fontWeight: "inherit" }}>
                 {getTotalDone(task)} of {task.subtasks.length} done
               </p>
             </button>
@@ -572,8 +627,9 @@ const Task = styled(
               top: "56%",
               transform: "translate(-50%, -50%)",
               display: "none",
+              opacity: "60%"
             }}
-            onClick={(e) => {
+            onClick={() => {
               setDeleteOverlay(true);
             }}
             ref={deleteButton}
@@ -583,8 +639,8 @@ const Task = styled(
               alt="Delete subtask"
               style={{
                 width: theme.iconSize,
-                filter: theme.grayImg,
-                cursor: "pointer",
+                filter: theme.iconColor,
+                cursor: "pointer"
               }}
             />
           </button>
@@ -614,23 +670,23 @@ const Task = styled(
   setTaskView: (value: iBoard) => void;
 }>`
   background-color: ${() => useContext(ThemeContext)?.background};
-  border-radius: ${theme.borderRadius};
+  border-radius: ${theme.curves};
   padding: 1.5ch;
   margin-bottom: 2ch;
   border: none;
   position: relative;
   cursor: grab;
   margin-right: 1rem;
-  ${styledText};
+  ${textTheme};
 `;
 
 function DeleteOverlay({
-  setDeleteOverlay,
-  selectedTask,
-  onClick,
-  selectedBoard,
-  setSelectedBoard,
-}: {
+                         setDeleteOverlay,
+                         selectedTask,
+                         onClick,
+                         selectedBoard,
+                         setSelectedBoard
+                       }: {
   setDeleteOverlay: (value: boolean) => void;
   selectedTask: iTask;
   onClick: {
@@ -661,7 +717,7 @@ function DeleteOverlay({
         style={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "center"
         }}
       >
         <ExitModal setOverlay={setDeleteOverlay} />
@@ -707,11 +763,15 @@ export function getTotalDone(task: iTask) {
 const NewStatus = styled.button`
   ${styleColumn};
   margin-right: 3ch;
-  ${styledText};
+  ${textTheme};
   font-size: 2rem;
   background-color: ${() => useContext(ThemeContext)?.background};
   border: none;
   cursor: pointer;
+
+  &:hover {
+    opacity: 60%;
+  }
 `;
 
 export default ViewBoard;

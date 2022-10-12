@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ThemeContext } from "../../utils/helpers";
+import { ThemeContext } from "../../styles/theme.styles";
 import { useContext } from "react";
 
 export default function Logo() {
