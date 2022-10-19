@@ -1,4 +1,4 @@
-import { iBoard, iTask } from "../../utils/database";
+import { iBoard, iTask } from "../../utils/interfaces";
 import styled from "styled-components";
 import { textTheme, theme, ThemeContext } from "../../styles/theme.styles";
 import React, { MutableRefObject, useContext, useState } from "react";

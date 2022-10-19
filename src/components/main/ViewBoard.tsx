@@ -1,6 +1,6 @@
 import { getBoards, getSelectedBoard, getSelectedBoardIndex } from "../../utils/helpers";
 import { scrollTheme, textTheme, theme, ThemeContext } from "../../styles/theme.styles";
-import { iBoard, iStatus, iTask } from "../../utils/database";
+import { iBoard, iStatus, iTask } from "../../utils/interfaces";
 import styled, { css } from "styled-components";
 import React, { MutableRefObject, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import OverlayModal, { ExitModal, ExitModalSubmit, InputModal, LabelModal } from "./OverlayModal";

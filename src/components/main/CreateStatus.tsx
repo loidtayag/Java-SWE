@@ -1,6 +1,6 @@
 import { InputModal, LabelModal } from "./OverlayModal";
 import React, { MutableRefObject } from "react";
-import { iBoard } from "../../utils/database";
+import { iBoard } from "../../utils/interfaces";
 
 function CreateStatus({
   selectedBoard,

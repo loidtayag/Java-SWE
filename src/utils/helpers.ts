@@ -1,4 +1,4 @@
-import { iBoard, iStatus } from "./database";
+import { iBoard, iStatus } from "./interfaces";
 
 export const defaultBoard: iBoard[] = [
   {

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { useContext, useState } from "react";
-import { iBoard, iSubtask, iTask } from "../../../utils/database";
+import { iBoard, iSubtask, iTask } from "../../../utils/interfaces";
 import {
   getBoards,
   getSelectedBoard, getStatuses

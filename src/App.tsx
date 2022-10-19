@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import Logo from "./components/sidebar/Logo";
 import BoardTitles from "./components/sidebar/BoardTitles";
 import DayOrNight from "./components/sidebar/DayOrNight";
@@ -17,9 +17,18 @@ import ViewBoard from "./components/main/ViewBoard";
 import Header from "./components/header/Header";
 import Sidebar from "./components/sidebar/Sidebar";
 import { theme, ThemeContext } from "./styles/theme.styles";
-import { iBoard } from "./utils/database";
+import { iBoard } from "./utils/interfaces";
 
 function App() {
+  const [fetched, setFetched] = useState(false);
+  console.log("R");
+  useEffect(() => {
+    fetch("http://localhost:5000/boards/0").then(res => res.json()).then(json => {
+      localStorage.setItem("boards", JSON.stringify(json));
+      setFetched(!fetched)
+    });
+  }, [])
+
   //Makes sure at least one board is initialised and a board is selected just to make NPE easier to deal with
   getBoards();
   const [showSidebar, setShowSidebar] = useState(getSidebar());

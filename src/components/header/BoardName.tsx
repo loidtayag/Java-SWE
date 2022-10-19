@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ThemeContext } from "../../styles/theme.styles";
 import React, { useContext } from "react";
-import { iBoard } from "../../utils/database";
+import { iBoard } from "../../utils/interfaces";
 import { getBoards, getSelectedBoardIndex } from "../../utils/helpers";
 
 const BoardName = (props: { boardNames: string[], setBoardNames: (value: string[]) => void, selectedBoard: iBoard, setSelectedBoard: (value: iBoard) => void, children: string }) => {

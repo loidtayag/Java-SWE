@@ -1,6 +1,6 @@
 import React, {ReactNode, useContext, useEffect, useState} from "react";
 import styled from "styled-components";
-import {iBoard} from "../../utils/database";
+import {iBoard} from "../../utils/interfaces";
 import {defaultBoard, getBoards, getSelectedBoard, getSelectedBoardIndex, initBoards,} from "../../utils/helpers";
 import { textTheme, theme, ThemeContext } from "../../styles/theme.styles";
 
