@@ -6,7 +6,7 @@ import { ThemeContext } from "../../utils/context";
 
 const BoardName = (props: { boardNames: string[], setBoardNames: (value: string[]) => void, selectedBoard: iBoard, setSelectedBoard: (value: iBoard) => void, children: string }) => {
 
-  return <Header contentEditable="true" onBlur={(e) => {
+  return <Header contentEditable="true" onBlur={(e: React.FormEvent<HTMLHeadingElement>) => {
     handleChangeBoardName(e, props.boardNames, props.setBoardNames, props.children, props.selectedBoard, props.setSelectedBoard);
   }}>
     {props.children}
