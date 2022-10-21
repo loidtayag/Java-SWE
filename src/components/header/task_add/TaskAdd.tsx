@@ -5,13 +5,14 @@ import {
   getBoards,
   getSelectedBoard, getStatuses
 } from "../../../utils/helpers";
-import { theme, ThemeContext, scrollTheme } from "../../../styles/theme.styles";
+import { theme, scrollTheme } from "../../../styles/theme.styles";
 import EnterOverlay from "./EnterOverlay";
 import ExitOverlay from "./ExitOverlay";
 import TitleInput from "./TitleInput";
 import DescriptionInput from "./DescriptionInput";
 import StatusInput from "./StatusInput";
 import SubtaskInput from "./SubtaskInput";
+import { ThemeContext } from "../../../utils/context";
 
 const TaskAdd = ({ setSelectedBoard }: { setSelectedBoard: (value: iBoard) => void }) => {
   const [overlay, setOverlay] = useState(false);

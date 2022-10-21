@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import { scrollTheme, ThemeContext } from "../../styles/theme.styles";
+import { scrollTheme } from "../../styles/theme.styles";
+import { ThemeContext } from "../../utils/context";
 
 const Sidebar = styled.div`
   grid-area: sidebar;

@@ -15,14 +15,14 @@ const GlobalStyles = createGlobalStyle`
   #showSidebar {
     display: grid;
     grid-template-areas: "sidebar header" "sidebar main";
-    grid-template-rows: 1fr 9fr;
+    grid-template-rows: 1.3fr 9fr;
     grid-template-columns: 1fr 5fr;
   }
 
   #hideSidebar {
     display: grid;
     grid-template-areas: "header" "main";
-    grid-template-rows: 1fr 9fr;
+    grid-template-rows: 1.3fr 9fr;
   }
 `;
 

@@ -1,12 +1,6 @@
-import { createContext, useContext } from "react";
+import { useContext } from "react";
 import { css } from "styled-components";
-
-export const ThemeContext = createContext<null | {
-  headers: string;
-  foreground: string;
-  background: string;
-  form: string;
-}>(null);
+import { ThemeContext } from "../utils/context";
 
 export const theme = {
   iconSize: "2.5rem",

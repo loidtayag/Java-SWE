@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import { theme, ThemeContext } from "../../../styles/theme.styles";
+import { theme } from "../../../styles/theme.styles";
 import { iData } from "./TaskAdd";
 import { getStatuses } from "../../../utils/helpers";
+import { ThemeContext } from "../../../utils/context";
 
 function StatusInput({ data }: { data: iData }) {
   return <div style={{ marginBottom: "2ch" }}>

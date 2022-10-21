@@ -43,7 +43,10 @@ export const initBoards = (): void => {
 
 export const getSelectedBoard = (): iBoard => {
   const boards: iBoard[] = getBoards();
-  const indexSelected: number = getSelectedBoardIndex();
+  let indexSelected: number = getSelectedBoardIndex();
+  if (indexSelected >= boards.length) {
+    indexSelected = 0;
+  }
 
   return boards[indexSelected];
 };
@@ -82,3 +85,4 @@ export const initSidebar = (): true => {
   localStorage.setItem("sidebar", "true");
   return true;
 };
+

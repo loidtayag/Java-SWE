@@ -1,6 +1,7 @@
 import React, { ReactNode, useContext } from "react";
-import { textTheme, theme, ThemeContext } from "../../styles/theme.styles";
+import { textTheme, theme } from "../../styles/theme.styles";
 import styled from "styled-components";
+import { ThemeContext } from "../../utils/context";
 
 function OverlayModal({
                         onSubmit,

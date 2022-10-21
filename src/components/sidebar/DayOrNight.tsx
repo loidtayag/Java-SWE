@@ -1,27 +1,28 @@
-import React, {useContext} from "react";
-import styled, {css} from "styled-components";
-import {theme, ThemeContext} from "../../styles/theme.styles";
+import React, { useContext } from "react";
+import styled, { css } from "styled-components";
+import { theme } from "../../styles/theme.styles";
+import { ThemeContext } from "../../utils/context";
 
-export default function DayOrNight({toggleTheme}: { toggleTheme: () => void; }) {
-    return (
-        <Flex>
-            <Moon/>
-            {/* Since Toggle has children with position absolute, Toggle's width is 0px if <div> is left out */}
-            <div>
-                <Toggle
-                    onClick={() => {
-                        console.log("E")
-                        toggleTheme();
-                    }}
-                >
-                    <Input type="checkbox"/>
-                    <Outer/>
-                    <Inner/>
-                </Toggle>
-            </div>
-            <Sun/>
-        </Flex>
-    );
+export default function DayOrNight({ toggleTheme }: { toggleTheme: () => void; }) {
+  return (
+    <Flex>
+      <Moon />
+      {/* Since Toggle has children with position absolute, Toggle's width is 0px if <div> is left out */}
+      <div>
+        <Toggle
+          onClick={() => {
+            console.log("E");
+            toggleTheme();
+          }}
+        >
+          <Input type="checkbox" />
+          <Outer />
+          <Inner />
+        </Toggle>
+      </div>
+      <Sun />
+    </Flex>
+  );
 }
 
 const Flex = styled.div`
@@ -36,8 +37,8 @@ const Flex = styled.div`
 `;
 
 const Sun = styled.img.attrs(() => ({
-    alt: "Light mode",
-    src: "/sun.svg",
+  alt: "Light mode",
+  src: "/sun.svg"
 }))`
   width: 3.7rem;
   filter: ${theme.iconColor};
@@ -70,7 +71,7 @@ const Inner = styled.div`
 `;
 
 const Input = styled.input.attrs(() => ({
-    defaultChecked: useContext(ThemeContext)?.headers === "#000000",
+  defaultChecked: useContext(ThemeContext)?.headers === "#000000"
 }))`
   position: absolute;
   width: 4rem;
@@ -100,8 +101,8 @@ const Input = styled.input.attrs(() => ({
 `;
 
 const Moon = styled.img.attrs(() => ({
-    alt: "Dark mode",
-    src: "/moon.svg",
+  alt: "Dark mode",
+  src: "/moon.svg"
 }))`
   width: 4rem;
   filter: ${theme.iconColor};

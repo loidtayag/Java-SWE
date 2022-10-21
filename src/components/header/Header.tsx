@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { ThemeContext } from "../../styles/theme.styles";
 import { useContext } from "react";
+import { ThemeContext } from "../../utils/context";
 
 const Header = styled.header`
   grid-area: header;

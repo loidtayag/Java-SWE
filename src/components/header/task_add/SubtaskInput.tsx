@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { theme, ThemeContext } from "../../../styles/theme.styles";
+import { theme } from "../../../styles/theme.styles";
 import React, { createRef, useContext, useEffect } from "react";
 import { iData } from "./TaskAdd";
+import { ThemeContext } from "../../../utils/context";
 
-function SubtaskInput({data, setData} : {data: iData, setData: (value: iData) => void}) {
-  let i = 0
+function SubtaskInput({ data, setData }: { data: iData, setData: (value: iData) => void }) {
+  let i = 0;
   console.log(data);
   return <div style={{ marginBottom: "2ch" }}>
     <h3 style={{ marginBottom: "0.3rem" }}>Subtasks</h3>
@@ -70,7 +71,7 @@ const Input = (props: {
 
   useEffect(() => {
     ref.current!.value = props.info.subtasks[props.myKey];
-  })
+  });
 
   return (
     <div
@@ -85,7 +86,7 @@ const Input = (props: {
         ref={ref}
         type="text"
         placeholder={easterEgg[props.myKey % 10]}
-        onChange = {(event) => {
+        onChange={(event) => {
           props.info.subtasks[props.myKey] = event.target.value;
         }}
         onBlur={(event) => {
@@ -152,8 +153,7 @@ const handleSubtask = (
   });
   if (dup === 1) {
     info.subtasks[myKey] = input.target.value;
-  }
-  else if (dup > 1) {
+  } else if (dup > 1) {
     info.subtasks[myKey] = "";
     input.target.value = "";
     input.target.placeholder = "Subtask name taken";

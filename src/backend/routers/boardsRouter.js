@@ -53,4 +53,3 @@ boardsRouter.get("/boards/:user_id", async (req, res) => {
   }
 });
 
-// Update(POST, PATCH, DELETE) boards

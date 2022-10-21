@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
 import { iData } from "./TaskAdd";
 import styled from "styled-components";
-import { theme, ThemeContext } from "../../../styles/theme.styles";
+import { theme } from "../../../styles/theme.styles";
+import { ThemeContext } from "../../../utils/context";
 
 function DescriptionInput({ data }: { data: iData }) {
   return <div style={{ marginBottom: "2ch" }}>

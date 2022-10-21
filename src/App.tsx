@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useRef, useState } from "react";
 import Logo from "./components/sidebar/Logo";
 import BoardTitles from "./components/sidebar/BoardTitles";
 import DayOrNight from "./components/sidebar/DayOrNight";
@@ -16,19 +16,14 @@ import {
 import ViewBoard from "./components/main/ViewBoard";
 import Header from "./components/header/Header";
 import Sidebar from "./components/sidebar/Sidebar";
-import { theme, ThemeContext } from "./styles/theme.styles";
+import { theme } from "./styles/theme.styles";
 import { iBoard } from "./utils/interfaces";
+import { ThemeContext, OnlineContext } from "./utils/context";
+import Picture from "./components/header/Picture";
 
 function App() {
-  const [fetched, setFetched] = useState(false);
-  console.log("R");
-  useEffect(() => {
-    fetch("http://localhost:5000/boards/0").then(res => res.json()).then(json => {
-      localStorage.setItem("boards", JSON.stringify(json));
-      setFetched(!fetched)
-    });
-  }, [])
-
+  const [online, setOnline] = useState(false);
+  const offlineData = useRef<iBoard[]>(getBoards());
   //Makes sure at least one board is initialised and a board is selected just to make NPE easier to deal with
   getBoards();
   const [showSidebar, setShowSidebar] = useState(getSidebar());
@@ -37,6 +32,10 @@ function App() {
   const [boardNames, setBoardNames] = useState<string[]>(
     getBoards().map((board: iBoard) => board.name)
   );
+
+  if (!online) {
+    offlineData.current = getBoards();
+  }
 
   const toggleTheme = () => {
     if (darkMode) {
@@ -49,47 +48,53 @@ function App() {
   };
 
   return (
-    <ThemeContext.Provider value={darkMode ? theme.dark : theme.light}>
-      <div style={{ maxWidth: "100vw", maxHeight: "100vh" }}>
-        <GlobalStyles />
-        <Grid id={showSidebar ? "showSidebar" : "hideSidebar"}>
-          {showSidebar && (
-            <Sidebar>
-              <Logo />
-              <BoardTitles boardNames={boardNames} setBoardNames={setBoardNames} setSelectedBoard={setSelectedBoard} />
-              <div>
-                <DayOrNight toggleTheme={toggleTheme} />
-                <ToggleSidebar
-                  setShowSidebar={() => {
-                    localStorage.setItem("sidebar", !showSidebar as unknown as string);
-                    setShowSidebar(!showSidebar);
-                  }}
-                />
-              </div>
-            </Sidebar>
-          )}
-          {!showSidebar && (
-            <HiddenSidebar
-              onClick={() => {
-                localStorage.setItem("sidebar", !showSidebar as unknown as string);
-                setShowSidebar(!showSidebar);
-              }}
+    <OnlineContext.Provider value={online}>
+      <ThemeContext.Provider value={darkMode ? theme.dark : theme.light}>
+        {online && <Picture />}
+        <div style={{ maxWidth: "100vw", maxHeight: "100vh" }}>
+          <GlobalStyles />
+          <Grid id={showSidebar ? "showSidebar" : "hideSidebar"}>
+            {showSidebar && (
+              <Sidebar>
+                <Logo />
+                <BoardTitles boardNames={boardNames} setBoardNames={setBoardNames}
+                             setSelectedBoard={setSelectedBoard} />
+                <div>
+                  <DayOrNight toggleTheme={toggleTheme} />
+                  <ToggleSidebar
+                    setShowSidebar={() => {
+                      localStorage.setItem("sidebar", !showSidebar as unknown as string);
+                      setShowSidebar(!showSidebar);
+                    }}
+                  />
+                </div>
+              </Sidebar>
+            )}
+            {!showSidebar && (
+              <HiddenSidebar
+                onClick={() => {
+                  localStorage.setItem("sidebar", !showSidebar as unknown as string);
+                  setShowSidebar(!showSidebar);
+                }}
+              />
+            )}
+            <Header>
+              <BoardName boardNames={boardNames} setBoardNames={setBoardNames} selectedBoard={selectedBoard}
+                         setSelectedBoard={setSelectedBoard}>{selectedBoard.name}</BoardName>
+              <TaskAdd setSelectedBoard={setSelectedBoard} />
+              <Settings online={online} setOnline={setOnline} offlineData={offlineData}
+                        setSelectedBoard={setSelectedBoard} setBoardNames={setBoardNames} />
+            </Header>
+            <ViewBoard
+              selectedBoard={selectedBoard}
+              setSelectedBoard={setSelectedBoard}
             />
-          )}
-          <Header>
-            <BoardName boardNames={boardNames} setBoardNames={setBoardNames} selectedBoard={selectedBoard}
-                       setSelectedBoard={setSelectedBoard}>{selectedBoard.name}</BoardName>
-            <TaskAdd setSelectedBoard={setSelectedBoard} />
-            <Settings />
-          </Header>
-          <ViewBoard
-            selectedBoard={selectedBoard}
-            setSelectedBoard={setSelectedBoard}
-          />
-        </Grid>
-      </div>
-    </ThemeContext.Provider>
-  );
+          </Grid>
+        </div>
+      </ThemeContext.Provider>
+    </OnlineContext.Provider>
+  )
+    ;
 }
 
 const Grid = styled.div.attrs(
@@ -98,8 +103,10 @@ const Grid = styled.div.attrs(
     children: children
   })
 )`
+  
   /* White space is left at the bottom of the Grid */
   min-height: 100vh;
+  max-height: 100vh;
 `;
 
 export default App;

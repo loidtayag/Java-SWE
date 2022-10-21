@@ -1,11 +1,12 @@
 import { getBoards, getSelectedBoard, getSelectedBoardIndex } from "../../utils/helpers";
-import { scrollTheme, textTheme, theme, ThemeContext } from "../../styles/theme.styles";
+import { scrollTheme, textTheme, theme } from "../../styles/theme.styles";
 import { iBoard, iStatus, iTask } from "../../utils/interfaces";
 import styled, { css } from "styled-components";
 import React, { MutableRefObject, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import OverlayModal, { ExitModal, ExitModalSubmit, InputModal, LabelModal } from "./OverlayModal";
 import CreateStatus from "./CreateStatus";
 import ViewTask from "./ViewTask";
+import { ThemeContext } from "../../utils/context";
 
 const ViewBoard = ({
                      selectedBoard,
@@ -156,18 +157,20 @@ const StyledBinStatus = ({ id, temp, selectedBoard, setSelectedBoard }: {
         let found = false;
         selectedBoard.status.forEach((status) => {
           if (status.name === statusName) {
-            selectedBoard.status.splice(i, 1)
+            selectedBoard.status.splice(i, 1);
             found = true;
+          } else if (!found) {
+            i++;
           }
-          else if (!found) {
-            i++
-          }
-        })
+        });
       }
       const newBoards = getBoards();
-      newBoards[getSelectedBoardIndex()].status.splice(i, 1)
-      localStorage.setItem("boards", JSON.stringify(newBoards))
-      setSelectedBoard(newBoards[getSelectedBoardIndex()])
+      newBoards[getSelectedBoardIndex()].status.splice(i, 1);
+      // eslint-disable-next-line no-restricted-globals
+      if (confirm(`Confirm deletion of task ${statusName}. Getting burnt out, that's why there's no fancy overlay...`)) {
+        localStorage.setItem("boards", JSON.stringify(newBoards));
+        setSelectedBoard(newBoards[getSelectedBoardIndex()]);
+      }
     }
     }
     style={{
@@ -374,9 +377,9 @@ const Div = styled.div`
   background-color: ${() => useContext(ThemeContext)?.foreground};
   ${textTheme};
   max-width: 100%;
-  ${scrollTheme};
-  overflow: auto;
   max-height: 90vh;
+  overflow: auto;
+  ${scrollTheme};
 `;
 
 const Status = styled.div`

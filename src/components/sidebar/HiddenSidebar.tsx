@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import { theme, ThemeContext } from "../../styles/theme.styles";
+import { theme } from "../../styles/theme.styles";
 
-export default function HiddenSidebar({onClick}: {onClick: () => void}) {
+export default function HiddenSidebar({ onClick }: { onClick: () => void }) {
 
   return (
     <Visual onClick={onClick}>
-      <Embed alt= "Reveal sidebar" src="/show.svg"/>
+      <Embed alt="Reveal sidebar" src="/show.svg" />
     </Visual>
   );
 }
@@ -18,7 +18,7 @@ const Visual = styled.button`
   cursor: pointer;
   border-style: none;
   isolation: isolate;
-  background-color: ${() => useContext(ThemeContext)?.foreground};
+  background-color: inherit;
   z-index: 1;
 `;
 

@@ -1,16 +1,17 @@
 import { iBoard, iTask } from "../../utils/interfaces";
 import styled from "styled-components";
-import { textTheme, theme, ThemeContext } from "../../styles/theme.styles";
+import { textTheme, theme } from "../../styles/theme.styles";
 import React, { MutableRefObject, useContext, useState } from "react";
 import { getTotalDone } from "./ViewBoard";
 import { InputModal, LabelModal } from "./OverlayModal";
+import { ThemeContext } from "../../utils/context";
 
 function ViewTask({
-  selectedBoard,
-  selectedTask,
-  data,
-  why,
-}: {
+                    selectedBoard,
+                    selectedTask,
+                    data,
+                    why
+                  }: {
   selectedBoard: iBoard;
   selectedTask: iTask;
   data: MutableRefObject<{
@@ -79,10 +80,10 @@ function justWhy(
 
 const Subtask = styled(
   ({
-    selectedBoard,
-    selectedTask,
-     why,
-  }: {
+     selectedBoard,
+     selectedTask,
+     why
+   }: {
     selectedBoard: iBoard;
     selectedTask: iTask;
     data: MutableRefObject<{
@@ -112,7 +113,7 @@ const Subtask = styled(
               style={{
                 display: "flex",
                 alignItems: "center",
-                position: "relative",
+                position: "relative"
               }}
             >
               <InputModal
@@ -121,17 +122,17 @@ const Subtask = styled(
                 onChange={(event) => {
                   const index = selectedBoard.status[why.status].tasks[
                     why.task
-                  ].subtasks.findIndex(
+                    ].subtasks.findIndex(
                     (subtask) =>
                       subtask.desc ===
                       event.target.nextElementSibling?.innerHTML
                   );
                   selectedBoard.status[why.status].tasks[why.task].subtasks[
                     index
-                  ].finished =
+                    ].finished =
                     !selectedBoard.status[why.status].tasks[why.task].subtasks[
                       index
-                    ].finished;
+                      ].finished;
                   setChecked(!checked);
                 }}
                 style={{
@@ -139,7 +140,7 @@ const Subtask = styled(
                   marginBottom: "0",
                   minWidth: "0%",
                   maxWidth: theme.iconSize,
-                  marginRight: "0ch",
+                  marginRight: "0ch"
                 }}
               ></InputModal>
               <LabelModal
@@ -149,7 +150,7 @@ const Subtask = styled(
                   position: "relative",
                   wordWrap: "break-word",
                   maxWidth: "28vw",
-                  left: "1ch",
+                  left: "1ch"
                   // top: "1ch",
                 }}
               >

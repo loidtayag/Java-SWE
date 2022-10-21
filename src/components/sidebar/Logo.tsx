@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { ThemeContext } from "../../styles/theme.styles";
 import { useContext } from "react";
+import { ThemeContext } from "../../utils/context";
 
 export default function Logo() {
   return (
@@ -20,7 +20,7 @@ const Flex = styled.div`
 
 const Visual = styled.img.attrs(() => ({
   alt: "Logo",
-  src: "/cat.jpg",
+  src: "/cat.jpg"
 }))`
   margin-right: 2ch;
   width: 6rem;
