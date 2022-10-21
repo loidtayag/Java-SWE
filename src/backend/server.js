@@ -7,7 +7,7 @@ const path = require("path")
 // "start": "react-scripts start",
 // "start": "react-scripts start",
 const port = process.env.PORT || 5000;
-app.use("/", express.static("build"))
+// app.use("/", express.static("build"))
 app.get("*", (req, res) => {
   res.sendFile(__dirname.replace("src\\backend", "build\\index.html"))
 })
