@@ -530,7 +530,15 @@ const Pixel = styled(
      className,
      setOverlay,
      selectedStatus
-   }) => {
+   }: {
+    color: string;
+    myKey: number;
+    children: ReactNode;
+    className: string;
+    setOverlay: (value: boolean) => void;
+    statusKey: number;
+    selectedStatus: number;
+  }) => {
     return (
       <span
         key={myKey}
@@ -539,7 +547,7 @@ const Pixel = styled(
           const colors = JSON.parse(localStorage.getItem("colors") as string);
           colors[selectedStatus] = color;
           localStorage.setItem("colors", JSON.stringify(colors));
-          setOverlay((prevCheck: boolean) => !prevCheck);
+          setOverlay(false);
         }}
       >
         {children}
@@ -555,17 +563,28 @@ const Pixel = styled(
   statusKey: number;
   selectedStatus: number;
 }>`
-  background-color: ${({ color }) => color};
-  color: ${({ color }) => color};
+  background-color: ${({ color }: { color: string }) => color};
+  color: ${({ color }: { color: string }) => color};
   cursor: pointer;
 
   :hover {
-    caret-color: ${({ color }) => color};
+    caret-color: ${({ color }: { color: string }) => color};
   }
 `;
 
 const Task = styled(
-  ({ className, task, onClick, selectedBoard, selectedTask, setTaskView }) => {
+  ({ className, task, onClick, selectedBoard, selectedTask, setTaskView }: {
+    className: string;
+    task: iTask;
+    onClick: {
+      status: number;
+      task: number;
+      setTaskView: (value: boolean) => void;
+    };
+    selectedBoard: iBoard;
+    selectedTask: iTask;
+    setTaskView: (value: iBoard) => void;
+  }) => {
     const deleteButton = useRef<HTMLButtonElement>(null);
     let containerDiv: HTMLDivElement | null = null;
     const [deleteOverlay, setDeleteOverlay] = useState(false);

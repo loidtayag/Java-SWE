@@ -40,7 +40,7 @@ function ViewTask({
       />
       <Title>Status</Title>
       <Status
-        onBlur={(event) => {
+        onBlur={(event: { currentTarget: { value: string; }; }) => {
           data.current.hack = event.currentTarget.value;
         }}
         defaultValue={justWhy(selectedBoard, why)}
@@ -119,7 +119,7 @@ const Subtask = styled(
               <InputModal
                 type="checkbox"
                 defaultChecked={subtask.finished}
-                onChange={(event) => {
+                onChange={(event: React.FocusEvent<HTMLInputElement, Element>) => {
                   const index = selectedBoard.status[why.status].tasks[
                     why.task
                     ].subtasks.findIndex(

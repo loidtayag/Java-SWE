@@ -10,7 +10,7 @@ function StatusInput({ data }: { data: iData }) {
     <h3 style={{ marginBottom: "0.3rem" }}>Status</h3>
     <Input
       id="status"
-      onBlur={(event) => {
+      onBlur={(event: { target: { value: string; }; }) => {
         data.status = event.target.value;
       }}>
       <Options />

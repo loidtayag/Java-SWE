@@ -28,7 +28,7 @@ const TaskAdd = ({ setSelectedBoard }: { setSelectedBoard: (value: iBoard) => vo
       <EnterOverlay setOverlay={setOverlay}>+ Add New Task</EnterOverlay>
       {overlay &&
         <Form
-          onSubmit={(e) => {
+          onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
             handleSubmit(e, setOverlay, data);
             setSelectedBoard(getSelectedBoard());
             setData({

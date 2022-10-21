@@ -19,7 +19,7 @@ function CreateStatus({
       <InputModal
         type="text"
         placeholder="Finished"
-        onBlur={(event) => {
+        onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
           preventDuplicate(event, selectedBoard, data.current);
         }}
         required={true}

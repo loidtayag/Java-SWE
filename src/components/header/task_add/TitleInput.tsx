@@ -16,7 +16,7 @@ function TitleInput({ data }: { data: iData }) {
       type="text"
       required={true}
       placeholder="Plan A to becoming a millionaire"
-      onBlur={(event) => {
+      onBlur={(event: React.FocusEvent<HTMLInputElement, Element>) => {
         handleTitle(event, data);
       }} />
   </div>;

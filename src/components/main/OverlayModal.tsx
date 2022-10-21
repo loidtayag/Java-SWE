@@ -89,20 +89,20 @@ export const LabelModal = styled.label`
 export const InputModal = styled.input<{
   type: string;
 }>`
-  height: ${({ type }) => (type === "submit" ? "3.5rem" : "2.7rem")};
-  background-color: ${({ type }) =>
+  height: ${({ type }: { type: string }) => (type === "submit" ? "3.5rem" : "2.7rem")};
+  background-color: ${({ type }: { type: string }) =>
           type === "submit" ? theme.clickable : "inherit"};
-  border: ${({ type }) =>
+  border: ${({ type }: { type: string }) =>
           type === "submit" ? "none" : "0.1rem solid " + theme.textColor};
   border-radius: 0.7rem;
-  cursor: ${({ type }) => (type === "submit" ? "pointer" : "")};
-  margin-bottom: ${({ type }) => (type === "submit" ? "" : "2ch")};
+  cursor: ${({ type }: { type: string }) => (type === "submit" ? "pointer" : "")};
+  margin-bottom: ${({ type }: { type: string }) => (type === "submit" ? "" : "2ch")};
   ${textTheme};
-  color: ${({ type }) =>
+  color: ${({ type }: { type: string }) =>
           type === "submit"
                   ? () => useContext(ThemeContext)?.headers
                   : theme.iconColor};
-  padding: ${({ type }) => (type === "submit" ? "" : "0 0.5ch 0 0.5ch")};
+  padding: ${({ type }: { type: string }) => (type === "submit" ? "" : "0 0.5ch 0 0.5ch")};
   min-width: 100%;
 `;
 

@@ -341,7 +341,7 @@ const BoardIndividual = (
 };
 
 const Highlight = styled.div<{ boardName: string }>`
-  background-color: ${(props) => {
+  background-color: ${(props : { boardName: string }) => {
     return getSelectedBoard().name === props.boardName
       ? theme.clickable
       : "inherit";

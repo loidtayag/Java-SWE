@@ -12,7 +12,7 @@ function DescriptionInput({ data }: { data: iData }) {
       type="text"
       required={true}
       placeholder="Sell a million 99s"
-      onBlur={(event) => {
+      onBlur={(event: { target: { value: string; }; }) => {
         data.desc = event.target.value;
       }} />
   </div>;
