@@ -15,8 +15,10 @@ const Settings = (props: { online: boolean, setOnline: (value: boolean) => void,
                 props.setBoardNames(props.offlineData.current.map((board: iBoard) => board.name));
                 props.setOnline(!props.online);
               } else {
+                // proxy
+
                 window.alert("Will now show user with id 0 in database because there's no account feature");
-                fetch("http://localhost:5000/boards/0").then(res => res.json()).then(json => {
+                fetch("/boards/0").then(res => res.json()).then(json => {
                   props.offlineData.current = getBoards();
                   localStorage.setItem("boards", JSON.stringify(json));
                   props.setSelectedBoard(json[0]);

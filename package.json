@@ -12,6 +12,7 @@
     "@types/react-dom": "^18.0.5",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "pg": "^8.8.0",
     "pg-pool": "^3.5.2",
@@ -25,12 +26,17 @@
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.4"
   },
+  "engines": {
+    "node" : "16.15.1",
+    "npm" : "8.11.0"
+  },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node src/index.tsx",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "devStart": "nodemon src/backend/server.js"
+    "devStart": "nodemon src/backend/server.js",
+    "heroku-postbuild": "npm install && npm run build"
   },
   "eslintConfig": {
     "extends": [
@@ -53,5 +59,6 @@
   "devDependencies": {
     "@types/styled-components": "^5.1.25",
     "nodemon": "^2.0.20"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }
