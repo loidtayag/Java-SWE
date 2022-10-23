@@ -27,12 +27,11 @@
     "web-vitals": "^2.1.4"
   },
   "engines": {
-    "node": "16.15.1",
-    "npm": "8.11.0"
+    "node" : "16.15.1",
+    "npm" : "8.11.0"
   },
   "scripts": {
-    "start": "node src/index.tsx",
-    "build": "react-scripts build",
+    "devStart": "nodemon src/backend/server.js",
     "heroku-postbuild": "npm install && npm run build"
   },
   "eslintConfig": {
@@ -54,7 +53,7 @@
     ]
   },
   "devDependencies": {
-    "@types/styled-components": "^5.1.26",
+    "@types/styled-components": "^5.1.25",
     "nodemon": "^2.0.20"
   },
   "proxy": "http://localhost:5000"
